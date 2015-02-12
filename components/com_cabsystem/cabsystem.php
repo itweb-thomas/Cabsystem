@@ -2,7 +2,14 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-echo "TEST";
+/*
+ *
+ * CABSYSTEM
+ * copyright 2015 Thomas Seif
+ * itweb
+ * Version: 1.2
+ *
+ */
 
 //sessions
 

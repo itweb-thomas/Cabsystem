@@ -38,14 +38,9 @@ class CabsystemHelpersStyle
 		}
 
 		//stylesheets
-
-		//$document->addStylesheet(JURI::base().'components/com_cabsystem/assets/libs/select2/select2-bootstrap.css');
-
 		$document->addStylesheet(JURI::base().'components/com_cabsystem/assets/libs/select2/select2.css');
 
 		$document->addStylesheet(JURI::base().'components/com_cabsystem/assets/libs/datetimepicker/bootstrap-datetimepicker.min.css');
-
-		$document->addStylesheet(JURI::base().'components/com_cabsystem/assets/libs/wizard/bootstrap-wizard.css');
 
 		$document->addStylesheet(JURI::base().'components/com_cabsystem/assets/libs/touchspin/jquery.bootstrap-touchspin.min.css');
 
@@ -63,7 +58,6 @@ class CabsystemHelpersStyle
 
 		//javascripts
 
-		//$document->addScript('http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js');
 		$document->addScript('//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js');
 
 		$document->addScript(JURI::base().'components/com_cabsystem/assets/libs/datatables/dataTables.bootstrap.js');
@@ -82,8 +76,6 @@ class CabsystemHelpersStyle
 
 		$document->addScript(JURI::base().'components/com_cabsystem/assets/js/cabsystem.js');
 
-		$document->addScript(JURI::base().'components/com_cabsystem/assets/libs/wizard/bootstrap-wizard.min.js');
-
 		$document->addScript(JURI::base().'components/com_cabsystem/assets/libs/touchspin/jquery.bootstrap-touchspin.min.js');
 		
 		$document->addScript(JURI::base().'components/com_cabsystem/assets/libs/jquery-number-master/jquery.number.min.js');
@@ -95,11 +87,6 @@ class CabsystemHelpersStyle
 		//View spezifische Scripts
 		switch($viewName) {
 			case 'statistic':
-				$document->addScript(JURI::base().'components/com_cabsystem/assets/libs/jspdf/jspdf.js');
-				$document->addScript(JURI::base().'components/com_cabsystem/assets/libs/jspdf/libs/Deflate/adler32cs.js');
-				$document->addScript(JURI::base().'components/com_cabsystem/assets/libs/jspdf/libs/FileSaver.js/FileSaver.js');
-				$document->addScript(JURI::base().'components/com_cabsystem/assets/libs/jspdf/libs/Blob.js/BlobBuilder.js');
-				$document->addScript(JURI::base().'components/com_cabsystem/assets/libs/jspdf/jspdf.plugin.from_html.js');
 			break;	
 			case 'order':
 				switch($layoutName) {
