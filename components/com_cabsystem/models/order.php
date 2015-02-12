@@ -1,5 +1,5 @@
 <?php
-//JOOMLA TITEL: Taxiflughafen Limo Wien - Airport City Cab - Flughafentaxi Wien
+//JOOMLA TITEL: Cabsystem Testseite - Airport City Cab - Flughafentaxi Wien
 // no direct access
 
 defined( '_JEXEC' ) or die( 'Restricted access' ); 
@@ -563,21 +563,20 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 	*/
 	public function informAdmin($type)
 	{
-		$from_email_address = 'office@taxiflughafen-limo-wien.at';
-		$from_email_name = 'Taxiflughafen Limo Wien';
+		$from_email_address = 'office@cabsystem-testseite.at';
+		$from_email_name = 'Cabsystem Testseite';
 		$subject = '';
 		$body = '';
-		//$to = 'thomas.seif@it-web.at';
-		$to = 'office@taxiflughafen-limo-wien.at';
+		$to = 'thomas.seif@it-web.at';
 		
 		$confirm = false;
 		
 		switch($type) {
 			//Wenn eine Fahrt aufgegeben wurde
 			case 'new-order':
-				$subject = 'Taxiflughafen Limo Wien - Neue Bestellung';
+				$subject = 'Cabsystem Testseite - Neue Bestellung';
 				$body .= '<h1>'.$subject.'</h1>';
-				$body .= '<p>Es wurde soeben eine neue Bestellung im Cabsystem von Taxiflughafen-Limo-Wien abgegeben. <a href="http://www.taxiflughafen-limo-wien.at/admin">Melden Sie sich hier an!</a></p>';
+				$body .= '<p>Es wurde soeben eine neue Bestellung im Cabsystem von Cabsystem Testseite abgegeben. <a href="http://www.cabsystem-testseite.at/admin">Melden Sie sich hier an!</a></p>';
 			break;
 			default:
 		}
@@ -606,8 +605,8 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 			$order = $model->getItem();
 		}
 		
-		$from_email_address = 'office@taxiflughafen-limo-wien.at';
-		$from_email_name = 'Taxiflughafen Limo Wien';
+		$from_email_address = 'office@cabsystem-testseite.at';
+		$from_email_name = 'Cabsystem Testseite';
 		$subject = '';
 		$body = '';
 		$to = $receiver_email;
@@ -617,13 +616,13 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 		switch($type) {
 			//Wenn eine Fahrt aufgegeben wurde
 			case 'new-order':
-				$subject = 'Taxiflughafen Limo Wien - Details zu Ihrer Fahrt';
+				$subject = 'Cabsystem Testseite - Details zu Ihrer Fahrt';
 				$body .= '<h1>'.$subject.'</h1>';
-				$body .= '<p>Sie haben soeben mit Ihrer Email-Adresse eine Fahrt bei Taxiflughafen Limo Wien gebucht. Bitte überprüfen Sie die folgenden Daten. Sollten Sie Änderungswünsche haben oder wurde die Fahrt nicht von Ihnen gebucht, kontaktieren Sie uns bitte telefonisch unter +43 (0) 664 246 6006.</p>';
+				$body .= '<p>Sie haben soeben mit Ihrer Email-Adresse eine Fahrt bei Cabsystem Testseite gebucht. Bitte überprüfen Sie die folgenden Daten. Sollten Sie Änderungswünsche haben oder wurde die Fahrt nicht von Ihnen gebucht, kontaktieren Sie uns bitte telefonisch unter +43 (0) 664 246 6006.</p>';
 			break;
 			//Wenn die Fahrt explizit storniert wurde
 			case 'order-canceled':
-				$subject = 'Taxiflughafen Limo Wien - Ihre Fahrt wurde storniert';
+				$subject = 'Cabsystem Testseite - Ihre Fahrt wurde storniert';
 				$body .= '<h1>'.$subject.'</h1>';
 				$body .= '<p>Ihre Fahrt wurde soeben von einem Administrator storniert. Die Vereinbarung zur Abholung ist somit aufgehoben.</p>';
 			break;
@@ -632,13 +631,13 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 		
 		$body .= self::getOrderMailInfo($order);
 		
-		$body .= '<p>Wir bedanken uns dass Sie sich für Taxiflughafen Limo Wien entschieden haben. Für weitere Fragen und zukünftige Buchungen kontakieren Sie uns bitte<br/>
+		$body .= '<p>Wir bedanken uns dass Sie sich für Cabsystem Testseite entschieden haben. Für weitere Fragen und zukünftige Buchungen kontakieren Sie uns bitte<br/>
 		telefonisch: +43 (0) 664 246 6006<br/>
-		per Email: office@taxiflughafen-limo-wien.at<br/>
-		oder wie gewohnt über unser Online-Buchungssystem auf www.taxiflughafen-limo-wien.at.</p>';
+		per Email: office@cabsystem-testseite.at<br/>
+		oder wie gewohnt über unser Online-Buchungssystem auf www.cabsystem-testseite.at.</p>';
 		
 		$body .= '<p>Mit freundlichen Grüßen<br/>
-		Taxiflughafen Limo Wien<br/>
+		Cabsystem Testseite<br/>
 		Dragan Maric<br/>
 		Taxi und Mietwagenunternehmen</p>';
 		
@@ -666,8 +665,8 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 		$model->set('order_id',$order_id);
 		$order = $model->getItem();
 		
-		$from_email_address = 'office@taxiflughafen-limo-wien.at';
-		$from_email_name = 'Taxiflughafen Limo Wien';
+		$from_email_address = 'office@cabsystem-testseite.at';
+		$from_email_name = 'Cabsystem Testseite';
 		$subject = '';
 		$body = '';
 		$to = $driver->email;
@@ -677,33 +676,33 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 		switch($type) {
 			//Wenn eine Fahrt zugewiesen wurde
 			case 'new-order':
-				$subject = 'Taxiflughafen Limo Wien - Neue Fahrt';
+				$subject = 'Cabsystem Testseite - Neue Fahrt';
 				$body .= '<h1>'.$subject.'</h1>';
 				$body .= '<p>Es wurde Ihnen soeben folgende Fahrt zugewiesen. Bitte begeben Sie sich zum angegebenen Zeitpunkt zum Kunden.</p>';
 				$confirm = true;
 			break;
 			//Wenn die Fahrt einem anderen Fahrer zugewiesen wurde
 			case 'now-other-driver':
-				$subject = 'Taxiflughafen Limo Wien - Eine Fahrt wurde einem anderen Fahrer zugewiesen';
+				$subject = 'Cabsystem Testseite - Eine Fahrt wurde einem anderen Fahrer zugewiesen';
 				$body .= '<h1>'.$subject.'</h1>';
 				$body .= '<p>Folgende Fahrt wurde einem anderen Fahrer zugewiesen. Sie sind für diese Fahrt ab jetzt nicht mehr zuständig.</p>';
 			break;
 			//Wenn die Fahrt dem gleichen Fahrer nochmal zugewiesen wurde
 			case 'same-order-again':
-				$subject = 'Taxiflughafen Limo Wien - Eine Fahrt wurde Ihnen neu zugewiesen';
+				$subject = 'Cabsystem Testseite - Eine Fahrt wurde Ihnen neu zugewiesen';
 				$body .= '<h1>'.$subject.'</h1>';
 				$body .= '<p>Es wurde Ihnen soeben folgende bereits zugewiesene Fahrt nochmals zugewiesen. Dies kann aufgrund einer Änderung durchgeführt worden sein. Beachten Sie somit bitte ausschließlich den neuen Auftrag und bestätigen Sie ihn nochmals.</p>';
 				$confirm = true;
 			break;
 			//Wenn die Fahrt jetzt keinem Fahrer mehr zugewiesen ist
 			case 'now-no-driver':
-				$subject = 'Taxiflughafen Limo Wien - Eine Fahrt wurde zurückgezogen';
+				$subject = 'Cabsystem Testseite - Eine Fahrt wurde zurückgezogen';
 				$body .= '<h1>'.$subject.'</h1>';
 				$body .= '<p>Folgende Fahrt wurde soeben zurückgezogen. Es ist somit kein Fahrer mehr zugewiesen und Sie sind für diese Fahrt ab jetzt nicht mehr zuständig.</p>';
 			break;
 			//Wenn die Fahrt explizit storniert wurde
 			case 'order-canceled':
-				$subject = 'Taxiflughafen Limo Wien - Eine Fahrt wurde storniert';
+				$subject = 'Cabsystem Testseite - Eine Fahrt wurde storniert';
 				$body .= '<h1>'.$subject.'</h1>';
 				$body .= '<p>Folgende Fahrt wurde soeben storniert. Sie sind weiterhin als Fahrer zugewiesen, sollen die Fahrt jedoch nicht antreten.</p>';
 			break;
@@ -715,7 +714,7 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 		if($confirm) {
 			$body .= '<h2>Bestätigung</h2>';
 			$body .= '<p>Bitte nehmen Sie die Fahrt an nachdem Sie alle Vorkehrungen dazu getroffen haben. Der Status der Fahrt verändert sich erst nachdem Sie den Links unten geklickt haben.</p>';
-			$body .= '<a href="http://www.taxiflughafen-limo-wien.at/index.php?option=com_cabsystem&controller=email&format=raw&tmpl=component&task=acceptOrder&order_id='.$order_id.'&driver_id='.$driver_id.'" target="_blank">ANNEHMEN</a>';
+			$body .= '<a href="http://labor03.it-entwicklung.at/index.php?option=com_cabsystem&controller=email&format=raw&tmpl=component&task=acceptOrder&order_id='.$order_id.'&driver_id='.$driver_id.'" target="_blank">ANNEHMEN</a>';
 		}
 		
 		if(CabsystemHelpersView::sendMail($from_email_address, $from_email_name, $subject, $body, $to))
