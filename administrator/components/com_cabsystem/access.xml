@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<access component="com_cabsystem">
+        <section name="component">
+                <action name="cabsystem.admin" title="COM_CABSYSTEM_ACL_ADMIN" description="" />
+        </section>
+</access>

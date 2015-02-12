@@ -1,0 +1,17 @@
+DROP TABLE IF EXISTS `cabsystem_cartypes_has_luggage_options` ;
+DROP TABLE IF EXISTS `cabsystem_luggage_options` ;
+DROP TABLE IF EXISTS `cabsystem_prices` ;
+DROP TABLE IF EXISTS `cabsystem_additionalprices` ;
+DROP TABLE IF EXISTS `cabsystem_orders` ;
+DROP TABLE IF EXISTS `cabsystem_additionaladdresses` ;
+DROP TABLE IF EXISTS `cabsystem_paymentmethods` ;
+DROP TABLE IF EXISTS `cabsystem_flights` ;
+DROP TABLE IF EXISTS `cabsystem_destination_cities` ;
+DROP TABLE IF EXISTS `cabsystem_drivers` ;
+DROP TABLE IF EXISTS `cabsystem_cartypes` ;
+DROP TABLE IF EXISTS `cabsystem_customers` ;
+DROP TABLE IF EXISTS `cabsystem_streets` ;
+DROP TABLE IF EXISTS `cabsystem_districts` ;
+DROP TABLE IF EXISTS `cabsystem_cities` ;
+DROP TABLE IF EXISTS `cabsystem_customer_salutations` ;
+DROP TABLE IF EXISTS `cabsystem_customer_titles` ;

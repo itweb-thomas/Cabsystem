@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="2.5.0" method="upgrade">
+	<name>COM_CABSYSTEM</name>
+	<creationDate>Oktober 2013</creationDate>
+	<author>itweb</author>
+	<authorEmail>office@itweb.at</authorEmail>
+	<authorUrl>http://www.itweb.at</authorUrl>
+	<copyright>Copyright 2013 by itweb</copyright>
+	<version>0.0.1</version>
+	<description>COM_CABSYSTEM_DESCRIPTION</description>
+	
+	<scriptfile>script.php</scriptfile>
+	
+	<install>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install.mysql.sql</file>
+		</sql>
+	</install>
+	
+	<uninstall>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/uninstall.mysql.sql</file>
+		</sql>
+	</uninstall>
+ 
+	<files folder="site">
+		<filename>index.html</filename>
+		<filename>cabsystem.php</filename>
+		<folder>assets</folder>
+		<folder>controllers</folder>
+		<folder>helpers</folder>
+		<folder>languages</folder>
+		<folder>models</folder>
+		<folder>tables</folder>
+		<folder>views</folder>
+	</files>
+	
+	<languages folder="site">
+		<language tag="de-DE">languages/de-DE/de-DE.com_cabsystem.ini</language>
+	</languages>
+	
+	<administration>
+		<menu>COM_CABSYSTEM_MENU</menu>
+		<files folder="admin">
+			<filename>index.html</filename>
+			<filename>cabsystem.php</filename>
+			<folder>languages</folder>
+			<folder>sql</folder>
+		</files>
+		<languages folder="admin">
+			<language tag="de-DE">languages/de-DE/de-DE.com_cabsystem.ini</language>
+			<language tag="de-DE">languages/de-DE/de-DE.com_cabsystem.sys.ini</language>
+		</languages>
+	</administration>
+</extension>
