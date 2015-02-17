@@ -80,7 +80,17 @@
     <button type="button" class="btn btn-sm btn-default btn-block setDriver" data-type="table" data-selectid="<?php echo $this->order->order_id;?>"><li class="fa fa-envelope-o"></li> Zuweisen</button>-->
     </td>
     <td><?php echo strtotime($this->order->datetime) ?></td>
-	<td><?php echo '<strong>'.date("d.m.Y", strtotime($this->order->datetime)).'</strong><br/>'.date("H:i", strtotime($this->order->datetime)); ?></td>
+	<td>
+			<?php
+				echo '<strong>'.date("d.m.Y", strtotime($this->order->datetime)).'</strong><br/>'.date("H:i", strtotime($this->order->datetime));
+				echo '<br/><br/><em>Erstellt am</em><br/>';
+				echo '<strong>'.date("d.m.Y", strtotime($this->order->created)).'</strong><br/>'.date("H:i", strtotime($this->order->created));
+				if($this->order->modified != null) {
+					echo '<br/><em>Zuletzt bearbeitet</em><br/>';
+					echo '<strong>'.date("d.m.Y", strtotime($this->order->modified)).'</strong><br/>'.date("H:i", strtotime($this->order->modified));
+				}
+			?>
+	</td>
 	<td>
 	<?php 
 	//Wenn abgelaufen

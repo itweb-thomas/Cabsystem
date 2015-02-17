@@ -272,6 +272,11 @@ class CabsystemModelsDistrict extends CabsystemModelsDefault
 		{
 		  $query->where('d.city_id = ' . (int) $this->_city_id);
 		}
+
+		if($this->_district)
+		{
+			$query->where('d.district = "' . $this->_district.'"');
+		}
 		
 		return $query;
 	}

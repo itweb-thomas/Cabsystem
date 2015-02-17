@@ -1,1 +1,29 @@
-#¢?±@NÁ…÷5&ž•ÑjÆQ9ª]ïdà@¹H€iš:b¨L‚Ìke%$ÀGM¨í-Ö•6›æ¶ýsÓD"'C~Ì+ß¬S{šQš;’ºNÝ´BºÑT˜;2¯¥^Ç¹ïÞ<vÇiR?ÿÀ×Œ%]1VùZÝê‹ùwgîˆ:Õ¨ÿ«‘0]r6gº4¿sJûCÑfµpR˜øÙˆ	ÆÛÌfß?ñs9FëOP>.âkpË\ÅÁšm)x†Ö!äÿŸ–k—Å‡ÝÄçõ×/îŒJÝ† é9Ž'@hwb´’2}šÓTeÑüÒ7Û]’M#j%„AëƒEÌÌ¶¿{»ÑŸ™~àw½Þ[Ô@(”
+<?php
+
+defined( '_JEXEC' ) or die( 'Restricted access' );
+
+
+
+class TableTitles extends JTable
+
+{
+
+    /**
+
+     * Constructor
+
+     *
+
+     * @param object Database connector object
+
+     */
+
+    function __construct(&$db)
+
+    {
+
+        parent::__construct('#__cabsystem_customer_titles', 'title_id', $db);
+
+    }
+
+}

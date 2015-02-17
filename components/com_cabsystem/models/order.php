@@ -127,6 +127,208 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 		//Customer speichern		
 		$data['table'] = "customers";		
 		$model = new CabsystemModelsCustomer();
+
+		//LERNENDES SYSTEM: Other abfragen
+		if($data['title_id'] == 'other') {
+			if(!empty($data['title_id-other'])) {
+				//neues Element erzeugen
+				$tmp_model = new CabsystemModelsTitle();
+				$tmp_model->set('_name',$data['title_id-other']);
+				$tmp_element = $tmp_model->getItem();
+				$data['title_id'] = $tmp_element->title_id;
+				//Wenn kein Element existiert
+				if(is_null($tmp_element)) {
+					$tmp_data = array();
+					$tmp_data['table'] = 'titles';
+					$tmp_data['name'] = $data['title_id-other'];
+					$tmp_model->store($tmp_data);
+					$tmp_element = $tmp_model->getItem();
+					$data['title_id'] = $tmp_element->title_id;
+				}
+			}
+			else {
+				$data['title_id'] = NULL;
+			}
+		}
+		unset($tmp_element);
+
+		if($data['from_city_id'] == 'other') {
+			if(!empty($data['from_city_id-other'])) {
+				//neues Element erzeugen
+				$tmp_model = new CabsystemModelsCity();
+				$tmp_model->set('_name',$data['from_city_id-other']);
+				$tmp_element = $tmp_model->getItem();
+				$data['from_city_id'] = $tmp_model->get('_city_id');
+				//Wenn kein Element existiert
+				if(is_null($tmp_element)) {
+					$tmp_data = array();
+					$tmp_data['table'] = 'cities';
+					$tmp_data['name'] = $data['from_city_id-other'];
+					$tmp_model->store($tmp_data);
+					$tmp_element = $tmp_model->getItem();
+					$data['from_city_id'] = $tmp_element->city_id;
+				}
+			}
+			else {
+				$data['from_city_id'] = NULL;
+			}
+		}
+		unset($tmp_element);
+
+		if($data['to_city_id'] == 'other') {
+			if(!empty($data['to_city_id-other'])) {
+				//neues Element erzeugen
+				$tmp_model = new CabsystemModelsCity();
+				$tmp_model->set('_name',$data['to_city_id-other']);
+				$tmp_element = $tmp_model->getItem();
+				$data['to_city_id'] = $tmp_model->get('_city_id');
+				//Wenn kein Element existiert
+				if(is_null($tmp_element)) {
+					$tmp_data = array();
+					$tmp_data['table'] = 'cities';
+					$tmp_data['name'] = $data['to_city_id-other'];
+					$tmp_model->store($tmp_data);
+					$tmp_element = $tmp_model->getItem();
+					$data['to_city_id'] = $tmp_element->city_id;
+				}
+			}
+			else {
+				$data['to_city_id'] = NULL;
+			}
+		}
+		unset($tmp_element);
+
+		if($data['from_district_id'] == 'other') {
+			if(!empty($data['from_district_id-other']) && !empty($data['from_city_id'])) {
+				//neues Element erzeugen
+				$tmp_model = new CabsystemModelsDistrict();
+				//ZIP TODO
+				$tmp_model->set('_zip','9999');
+				$tmp_model->set('_district',$data['from_district_id-other']);
+				$tmp_model->set('_city_id',$data['from_city_id']);
+				$tmp_element = $tmp_model->getItem();
+				$data['from_district_id'] = $tmp_model->get('_district_id');
+				//Wenn kein Element existiert
+				if(is_null($tmp_element)) {
+					$tmp_data = array();
+					$tmp_data['table'] = 'districts';
+					//ZIP TODO
+					$tmp_data['zip'] = '9999';
+					$tmp_data['district'] = $data['from_district_id-other'];
+					$tmp_data['city_id'] = $data['from_city_id'];
+					$tmp_model->store($tmp_data);
+					$tmp_element = $tmp_model->getItem();
+					$data['from_district_id'] = $tmp_element->district_id;
+				}
+			}
+			else {
+				$data['from_district_id'] = NULL;
+			}
+		}
+		unset($tmp_element);
+
+		if($data['to_district_id'] == 'other') {
+			if(!empty($data['to_district_id-other']) && !empty($data['to_city_id'])) {
+				//neues Element erzeugen
+				$tmp_model = new CabsystemModelsDistrict();
+				//ZIP TODO
+				$tmp_model->set('_zip','9999');
+				$tmp_model->set('_district',$data['to_district_id-other']);
+				$tmp_model->set('_city_id',$data['to_city_id']);
+				$tmp_element = $tmp_model->getItem();
+				$data['to_district_id'] = $tmp_model->get('_district_id');
+				//Wenn kein Element existiert
+				if(is_null($tmp_element)) {
+					$tmp_data = array();
+					$tmp_data['table'] = 'districts';
+					//ZIP TODO
+					$tmp_data['zip'] = '9999';
+					$tmp_data['district'] = $data['to_district_id-other'];
+					$tmp_data['city_id'] = $data['to_city_id'];
+					$tmp_model->store($tmp_data);
+					$tmp_element = $tmp_model->getItem();
+					$data['to_district_id'] = $tmp_element->district_id;
+				}
+			}
+			else {
+				$data['to_district_id'] = NULL;
+			}
+		}
+		unset($tmp_element);
+
+		if($data['from_street_id'] == 'other') {
+			if(!empty($data['from_street_id-other']) && !empty($data['from_district_id'])) {
+				//neues Element erzeugen
+				$tmp_model = new CabsystemModelsStreet();
+				$tmp_model->set('_name',$data['from_street_id-other']);
+				$tmp_model->set('_district_id',$data['from_district_id']);
+				$tmp_element = $tmp_model->getItem();
+				$data['from_street_id'] = $tmp_model->get('_street_id');
+				//Wenn kein Element existiert
+				if(is_null($tmp_element)) {
+					$tmp_data = array();
+					$tmp_data['table'] = 'streets';
+					$tmp_data['name'] = $data['from_street_id-other'];
+					$tmp_data['district_id'] = $data['from_district_id'];
+					$tmp_model->store($tmp_data);
+					$tmp_element = $tmp_model->getItem();
+					$data['from_street_id'] = $tmp_element->street_id;
+				}
+			}
+			else {
+				$data['from_street_id'] = NULL;
+			}
+		}
+		unset($tmp_element);
+
+		if($data['to_street_id'] == 'other') {
+			if(!empty($data['to_street_id-other']) && !empty($data['to_district_id'])) {
+				//neues Element erzeugen
+				$tmp_model = new CabsystemModelsStreet();
+				$tmp_model->set('_name',$data['to_street_id-other']);
+				$tmp_model->set('_district_id',$data['to_district_id']);
+				$tmp_element = $tmp_model->getItem();
+				$data['to_street_id'] = $tmp_model->get('_street_id');
+				//Wenn kein Element existiert
+				if(is_null($tmp_element)) {
+					$tmp_data = array();
+					$tmp_data['table'] = 'streets';
+					$tmp_data['name'] = $data['to_street_id-other'];
+					$tmp_data['district_id'] = $data['to_district_id'];
+					$tmp_model->store($tmp_data);
+					$tmp_element = $tmp_model->getItem();
+					$data['to_street_id'] = $tmp_element->street_id;
+				}
+			}
+			else {
+				$data['to_street_id'] = NULL;
+			}
+		}
+		unset($tmp_element);
+
+		if($data['from_flight_id'] == 'other') {
+			if(!empty($data['from_flight_id-other'])) {
+				//neues Element erzeugen
+				$tmp_model = new CabsystemModelsDestination_city();
+				$tmp_model->set('_name',$data['from_flight_id-other']);
+				$tmp_element = $tmp_model->getItem();
+				$data['from_flight_id'] = $tmp_model->get('_city_id');
+				//Wenn kein Element existiert
+				if(is_null($tmp_element)) {
+					$tmp_data = array();
+					$tmp_data['table'] = 'destination_cities';
+					$tmp_data['name'] = $data['from_flight_id-other'];
+					$tmp_model->store($tmp_data);
+					$tmp_element = $tmp_model->getItem();
+					$data['from_flight_id'] = $tmp_element->city_id;
+				}
+			}
+			else {
+				$data['from_flight_id'] = NULL;
+			}
+		}
+		unset($tmp_element);
+
 		if ($customer_result = $model->store($data))
 		{
 			//Wenn neu
@@ -786,9 +988,8 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 				if(is_array($additional_address_district)) {
 					$district = JTable::getInstance('districts','Table');
 					$district->load($additional_address_district[0]);
-					$additional_addresses .= $district->zip.' '.$district->district.'<br/>';
+					$result .= $district->zip.' '.$district->district.'<br/>';
 					if(!empty($additional_address_district[1])) {
-						$result .= $district->zip.' '.$district->district.'<br/>';
 						$result .= '<em>'.$additional_address_district[1].'</em><br/>';
 					}
 				}

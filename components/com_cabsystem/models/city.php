@@ -77,6 +77,10 @@ class CabsystemModelsCity extends CabsystemModelsDefault
 		{
 		  $query->where('c.city_id = ' . (int) $this->_city_id);
 		}
+		if($this->_name)
+		{
+			$query->where('c.name = "' . $this->_name.'"');
+		}
 
 		return $query;
 	}

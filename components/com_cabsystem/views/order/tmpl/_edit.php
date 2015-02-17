@@ -14,14 +14,26 @@
                         $all_districts_array = array();
                         $district_array = array();
                         $street_array = array();
+
+                        $district_array['other'] = array();
+                        array_push($district_array['other'],array('id'=>'other','tag'=>'Anderer'));
+                        $street_array['other'] = array();
+                        array_push($street_array['other'],array('id'=>'other','tag'=>'Andere'));
+
                         foreach($this->cities as $city) 
                         {
+                            $district_array[$city->city_id] = array();
+                            array_push($district_array[$city->city_id],array('id'=>'other','tag'=>'Anderer'));
+
                             $district_array[$city->city_id] = array();
                             foreach($city->districts as $district) 
                             {
                                 array_push($district_array[$city->city_id],array('id'=>$district->district_id,'tag'=>$district->zip.' '.$district->district));
                                 array_push($all_districts_array,array('id'=>$district->district_id,'tag'=>$district->zip.' '.$district->district));
-                                
+
+                                $street_array[$district->district_id] = array();
+                                array_push($street_array[$district->district_id],array('id'=>'other','tag'=>'Andere'));
+
                                 $street_array[$district->district_id] = array();
                                 foreach($district->streets as $street) 
                                 {
@@ -59,6 +71,7 @@
                                 <div class="col-md-9">
                                     <select class="form-control" name="from_city_id" id="editForm-from_city_id">
                                       <?php
+                                        echo '<option value="other">Anderer</option>';
                                         foreach($this->cities as $city) {
                                             $selected = "";
                                             if($this->order->from_city_id == $city->city_id)
@@ -107,7 +120,7 @@
                                 <div class="col-md-9">
                                     <select class="form-control" name="from_flight_id" id="editForm-from_flight_id">
                                       <?php
-                                        echo '<option value=""></option>';
+                                        echo '<option value="other">Andere</option>';
                                         foreach($this->destination_cities as $destination_city) {
                                             $selected = "";
                                             if($this->order->flight_id == $destination_city->city_id)
@@ -166,6 +179,7 @@
                                 <div class="col-md-9">
                                     <select class="form-control" name="to_city_id" id="editForm-to_city_id">
                                       <?php
+                                        echo '<option value="other">Anderer</option>';
                                         foreach($this->cities as $city) {
                                             $selected = "";
                                             if($this->order->to_city_id == $city->city_id)
@@ -279,7 +293,8 @@
                             <div class="col-md-9">
                                 <select class="form-control" name="title_id" id="editForm-title_id">
                                   <?php
-                                    echo '<option value=""></option>';	
+                                    echo '<option value=""></option>';
+                                    echo '<option value="other">Anderer</option>';
                                     foreach($this->titles as $title) {
                                         $selected = "";
                                         if($this->order->title_id == $title->title_id) 

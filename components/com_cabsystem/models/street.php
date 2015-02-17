@@ -112,6 +112,11 @@ class CabsystemModelsStreet extends CabsystemModelsDefault
 
 		}
 
+		if($this->_name)
+		{
+			$query->where('s.name = "' . $this->_name.'"');
+		}
+
 		return $query;
 	}
 	

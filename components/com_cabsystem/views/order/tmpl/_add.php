@@ -14,15 +14,24 @@
                     $all_districts_array = array();
                     $district_array = array();
                     $street_array = array();
+
+                    $district_array['other'] = array();
+                    array_push($district_array['other'],array('id'=>'other','tag'=>'Anderer'));
+                    $street_array['other'] = array();
+                    array_push($street_array['other'],array('id'=>'other','tag'=>'Andere'));
+
                     foreach($this->cities as $city) 
                     {
                         $district_array[$city->city_id] = array();
+                        array_push($district_array[$city->city_id],array('id'=>'other','tag'=>'Anderer'));
+
                         foreach($city->districts as $district) 
                         {
                             array_push($district_array[$city->city_id],array('id'=>$district->district_id,'tag'=>$district->zip.' '.$district->district));
                             array_push($all_districts_array,array('id'=>$district->district_id,'tag'=>$district->zip.' '.$district->district));
                             
                             $street_array[$district->district_id] = array();
+                            array_push($street_array[$district->district_id],array('id'=>'other','tag'=>'Andere'));
                             foreach($district->streets as $street) 
                             {
                                 array_push($street_array[$district->district_id],array('id'=>$street->street_id,'tag'=>$street->name));
@@ -54,6 +63,7 @@
                             <div class="col-md-9">
                                 <select class="form-control" name="from_city_id" id="addForm-from_city_id">
                                   <?php
+                                    echo '<option value="other">Anderer</option>';
                                     foreach($this->cities as $city) {
                                         echo '<option value="'.$city->city_id.'">'.$city->name.'</option>';	
                                     }
@@ -98,7 +108,7 @@
                             <div class="col-md-9">
                                 <select class="form-control" name="from_flight_id" id="addForm-from_flight_id">
                                   <?php
-                                    echo '<option value=""></option>';
+                                    echo '<option value="other">Andere</option>';
                                     foreach($this->destination_cities as $destination_city) {
                                         echo '<option value="'.$destination_city->city_id.'">'.$destination_city->name.'</option>';	
                                     }
@@ -146,6 +156,7 @@
                             <div class="col-md-9">
                                 <select class="form-control" name="to_city_id" id="addForm-to_city_id">
                                   <?php
+                                    echo '<option value="other">Anderer</option>';
                                     foreach($this->cities as $city) {
                                         echo '<option value="'.$city->city_id.'">'.$city->name.'</option>';	
                                     }
@@ -241,7 +252,8 @@
                             <div class="col-md-9">
                                 <select class="form-control" name="title_id" id="addForm-title_id">
                                   <?php
-                                    echo '<option value=""></option>';	
+                                    echo '<option value=""></option>';
+                                    echo '<option value="other">Anderer</option>';
                                     foreach($this->titles as $title) {
                                         echo '<option value="'.$title->title_id.'">'.$title->name.'</option>';	
                                     }

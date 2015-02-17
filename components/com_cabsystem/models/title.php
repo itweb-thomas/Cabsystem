@@ -106,7 +106,7 @@ class CabsystemModelsTitle extends CabsystemModelsDefault
 
 		{
 
-		  $query->where('t.name = ' . (int) $this->_name);
+		  $query->where('t.name = "' . $this->_name.'"');
 
 		}
 
