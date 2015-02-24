@@ -50,6 +50,7 @@
 							echo '</div>';
                         }
                       ?>
+					<input type="hidden" name="created" value="<?php echo $this->additionaladdress->created; ?>" />
                     <input type="hidden" name="additionaladdress_id" value="<?php echo $this->additionaladdress->additionaladdress_id; ?>" />
                     <input type="hidden" name="view" value="additionaladdress" />
                     <input type="hidden" name="model" value="Additionaladdress" />

@@ -101,10 +101,15 @@ class CabsystemModelsFlight extends CabsystemModelsDefault
 		  $query->where('f.flight_id = ' . (int) $this->_flight_id);
 		}
 
-		if(is_numeric($this->_city_id)) 
+		if(is_numeric($this->_city_id))
 		{
 		  $query->where('f.city_id = ' . (int) $this->_city_id);
 
+		}
+
+		if($this->_flightnumber)
+		{
+			$query->where('f.flightnumber = "' . $this->_flightnumber.'"');
 		}
 
 		return $query;

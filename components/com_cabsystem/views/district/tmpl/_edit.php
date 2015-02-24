@@ -116,6 +116,7 @@
 						  ?>
 						</div>
 					</div>
+                    <input type="hidden" name="created" value="<?php echo $this->district->created; ?>" />
                     <input type="hidden" name="district_id" value="<?php echo $this->district->district_id; ?>" />
                     <input type="hidden" name="view" value="district" />
                     <input type="hidden" name="model" value="District" />

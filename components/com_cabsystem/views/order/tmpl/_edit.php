@@ -15,18 +15,17 @@
                         $district_array = array();
                         $street_array = array();
 
-                        $district_array['other'] = array();
-                        array_push($district_array['other'],array('id'=>'other','tag'=>'Anderer'));
+                        /*$district_array['other'] = array();
+                        array_push($district_array['other'],array('id'=>'other','tag'=>'Anderer'));*/
                         $street_array['other'] = array();
                         array_push($street_array['other'],array('id'=>'other','tag'=>'Andere'));
 
                         foreach($this->cities as $city) 
                         {
                             $district_array[$city->city_id] = array();
-                            array_push($district_array[$city->city_id],array('id'=>'other','tag'=>'Anderer'));
+                            //array_push($district_array[$city->city_id],array('id'=>'other','tag'=>'Anderer'));
 
-                            $district_array[$city->city_id] = array();
-                            foreach($city->districts as $district) 
+                            foreach($city->districts as $district)
                             {
                                 array_push($district_array[$city->city_id],array('id'=>$district->district_id,'tag'=>$district->zip.' '.$district->district));
                                 array_push($all_districts_array,array('id'=>$district->district_id,'tag'=>$district->zip.' '.$district->district));
@@ -44,6 +43,27 @@
                         echo '<input id="editForm-district-array" type="hidden" value="'.htmlentities(json_encode($district_array)).'"/>';
                         echo '<input id="editForm-street-array" type="hidden" value="'.htmlentities(json_encode($street_array)).'"/>';
                         echo '<input id="editForm-all-districts-array" type="hidden" value="'.htmlentities(json_encode($all_districts_array)).'"/>';
+                        ?>
+                        <?php
+                        $all_flightnumbers_array = array();
+                        $flightnumber_array = array();
+
+                        $flightnumber_array['other'] = array();
+                        array_push($flightnumber_array['other'],array('id'=>'other','tag'=>'Andere'));
+
+                        foreach($this->destination_cities as $destination_city)
+                        {
+                            $flightnumber_array[$destination_city->city_id] = array();
+                            array_push($flightnumber_array[$destination_city->city_id],array('id'=>'other','tag'=>'Andere'));
+
+                            foreach($destination_city->flightnumbers as $flightnumber)
+                            {
+                                array_push($flightnumber_array[$destination_city->city_id],array('id'=>$flightnumber->flight_id,'tag'=>$flightnumber->flightnumber));
+                                array_push($all_flightnumbers_array,array('id'=>$flightnumber->flight_id,'tag'=>$flightnumber->flightnumber));
+                            }
+                        }
+                        echo '<input id="editForm-flightnumber-array" type="hidden" value="'.htmlentities(json_encode($flightnumber_array)).'"/>';
+                        echo '<input id="editForm-all-flightnumbers-array" type="hidden" value="'.htmlentities(json_encode($all_flightnumbers_array)).'"/>';
                         ?>
                     
                         <div class="form-group">
@@ -71,7 +91,7 @@
                                 <div class="col-md-9">
                                     <select class="form-control" name="from_city_id" id="editForm-from_city_id">
                                       <?php
-                                        echo '<option value="other">Anderer</option>';
+                                        //echo '<option value="other">Anderer</option>';
                                         foreach($this->cities as $city) {
                                             $selected = "";
                                             if($this->order->from_city_id == $city->city_id)
@@ -133,11 +153,11 @@
                                     </select>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="editForm-flight_number" class="col-md-3 control-label">Flugnr.</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control" id="editForm-flight_number" name="flight_number" value="<?php echo (!empty($this->order->flight_number)) ? $this->order->flight_number : '';?>"/>
+                                    <input type='hidden' class="form-control" name="flight_number" id="editForm-flight_number" value="<?php echo (!empty($this->order->flight_number)) ? $this->order->flight_number_id : '';?>"/>
                                 </div>
                             </div>
                             
@@ -506,7 +526,8 @@
 						echo '<div class="alert alert-info" role="alert">Zu dieser Fahrt wurde eine Rückfahrt gebucht (Nr.: '.$this->order->postorder_id.')</div>';
 					}
 				?>
-                
+
+                <input type="hidden" name="created" id="editForm-created" value="<?php echo $this->order->created; ?>" />
                 <input type="hidden" name="price" id="editForm-price" value="<?php echo $this->order->price; ?>" />
 				<input type="hidden" name="order_id" value="<?php echo $this->order->order_id; ?>" />
                 

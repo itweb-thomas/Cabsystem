@@ -61,8 +61,8 @@ class CabsystemHelpersStyle
 		$document->addScript('//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js');
 
 		$document->addScript(JURI::base().'components/com_cabsystem/assets/libs/datatables/dataTables.bootstrap.js');
-		
-		$document->addScript('//cdn.datatables.net/plug-ins/be7019ee387/api/fnAddTr.js');		
+
+		$document->addScript(JURI::base().'components/com_cabsystem/assets/libs/fnaddtr/fnAddTr.js');
 
 		$document->addScript(JURI::base().'components/com_cabsystem/assets/libs/select2/select2.min.js');
 

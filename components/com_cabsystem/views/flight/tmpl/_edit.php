@@ -8,7 +8,7 @@
 
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
-				<h4 class="modal-title" id="editFlightModalLabel">Flug bearbeiten</h4>
+				<h4 class="modal-title" id="editFlightModalLabel">Flugnummer bearbeiten</h4>
 
 			</div>
 
@@ -63,6 +63,7 @@
 						</div>
 
 					</div>
+					<input type="hidden" name="created" value="<?php echo $this->flight->created; ?>" />
                     <input type="hidden" name="flight_id" value="<?php echo $this->flight->flight_id; ?>" />
                     <input type="hidden" name="view" value="flight" />
                     <input type="hidden" name="model" value="Flight" />

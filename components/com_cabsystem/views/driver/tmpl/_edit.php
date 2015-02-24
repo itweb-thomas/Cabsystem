@@ -86,7 +86,8 @@
 
 						</div>
 
-					</div> 
+					</div>
+					<input type="hidden" name="created" value="<?php echo $this->driver->created; ?>" />
                     <input type="hidden" name="driver_id" value="<?php echo $this->driver->driver_id; ?>" />
                     <input type="hidden" name="view" value="driver" />
                     <input type="hidden" name="model" value="Driver" />

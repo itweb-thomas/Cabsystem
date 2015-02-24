@@ -160,6 +160,7 @@
 						</div>
 
 					</div>
+					<input type="hidden" name="created" value="<?php echo $this->customer->created; ?>" />
                     <input type="hidden" name="customer_id" value="<?php echo $this->customer->customer_id; ?>" />
                     <input type="hidden" name="view" value="customer" />
                     <input type="hidden" name="model" value="Customer" />

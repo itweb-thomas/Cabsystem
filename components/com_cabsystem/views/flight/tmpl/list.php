@@ -1,5 +1,5 @@
 
-<h1><?php echo JText::_('COM_CABSYSTEM_FLIGHT_LIST_TITLE'); ?></h1>
+<h1>Flugnummern</h1>
 
 <div class="content-toolbar">
 
@@ -14,10 +14,10 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="deleteConfirmLabel">Flug löschen</h4>
+            <h4 class="modal-title" id="deleteConfirmLabel">Flugnummer löschen</h4>
           </div>
           <div class="modal-body">
-            <p>Möchten Sie diesen Flug wirklich löschen?</p>
+            <p>Möchten Sie diese Flugnummer wirklich löschen?</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">nein</button>

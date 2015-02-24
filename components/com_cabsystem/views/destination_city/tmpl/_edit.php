@@ -27,6 +27,7 @@
 						</div>
 
 					</div>
+					<input type="hidden" name="created" value="<?php echo $this->destination_city->created; ?>" />
                     <input type="hidden" name="city_id" value="<?php echo $this->destination_city->city_id; ?>" />
                     <input type="hidden" name="view" value="destination_city" />
                     <input type="hidden" name="model" value="Destination_city" />

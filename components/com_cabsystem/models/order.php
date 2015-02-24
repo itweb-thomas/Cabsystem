@@ -152,13 +152,13 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 		}
 		unset($tmp_element);
 
-		if($data['from_city_id'] == 'other') {
+		/*if($data['from_city_id'] == 'other') {
 			if(!empty($data['from_city_id-other'])) {
 				//neues Element erzeugen
 				$tmp_model = new CabsystemModelsCity();
 				$tmp_model->set('_name',$data['from_city_id-other']);
 				$tmp_element = $tmp_model->getItem();
-				$data['from_city_id'] = $tmp_model->get('_city_id');
+				$data['from_city_id'] = $tmp_element->city_id;
 				//Wenn kein Element existiert
 				if(is_null($tmp_element)) {
 					$tmp_data = array();
@@ -181,7 +181,7 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 				$tmp_model = new CabsystemModelsCity();
 				$tmp_model->set('_name',$data['to_city_id-other']);
 				$tmp_element = $tmp_model->getItem();
-				$data['to_city_id'] = $tmp_model->get('_city_id');
+				$data['to_city_id'] = $tmp_element->city_id;
 				//Wenn kein Element existiert
 				if(is_null($tmp_element)) {
 					$tmp_data = array();
@@ -203,17 +203,17 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 				//neues Element erzeugen
 				$tmp_model = new CabsystemModelsDistrict();
 				//ZIP TODO
-				$tmp_model->set('_zip','9999');
+				$tmp_model->set('_zip','0000');
 				$tmp_model->set('_district',$data['from_district_id-other']);
 				$tmp_model->set('_city_id',$data['from_city_id']);
 				$tmp_element = $tmp_model->getItem();
-				$data['from_district_id'] = $tmp_model->get('_district_id');
+				$data['from_district_id'] = $tmp_element->district_id;
 				//Wenn kein Element existiert
 				if(is_null($tmp_element)) {
 					$tmp_data = array();
 					$tmp_data['table'] = 'districts';
 					//ZIP TODO
-					$tmp_data['zip'] = '9999';
+					$tmp_data['zip'] = '0000';
 					$tmp_data['district'] = $data['from_district_id-other'];
 					$tmp_data['city_id'] = $data['from_city_id'];
 					$tmp_model->store($tmp_data);
@@ -236,7 +236,7 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 				$tmp_model->set('_district',$data['to_district_id-other']);
 				$tmp_model->set('_city_id',$data['to_city_id']);
 				$tmp_element = $tmp_model->getItem();
-				$data['to_district_id'] = $tmp_model->get('_district_id');
+				$data['to_district_id'] = $tmp_element->district_id;
 				//Wenn kein Element existiert
 				if(is_null($tmp_element)) {
 					$tmp_data = array();
@@ -254,7 +254,7 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 				$data['to_district_id'] = NULL;
 			}
 		}
-		unset($tmp_element);
+		unset($tmp_element);*/
 
 		if($data['from_street_id'] == 'other') {
 			if(!empty($data['from_street_id-other']) && !empty($data['from_district_id'])) {
@@ -263,7 +263,7 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 				$tmp_model->set('_name',$data['from_street_id-other']);
 				$tmp_model->set('_district_id',$data['from_district_id']);
 				$tmp_element = $tmp_model->getItem();
-				$data['from_street_id'] = $tmp_model->get('_street_id');
+				$data['from_street_id'] = $tmp_element->street_id;
 				//Wenn kein Element existiert
 				if(is_null($tmp_element)) {
 					$tmp_data = array();
@@ -288,7 +288,7 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 				$tmp_model->set('_name',$data['to_street_id-other']);
 				$tmp_model->set('_district_id',$data['to_district_id']);
 				$tmp_element = $tmp_model->getItem();
-				$data['to_street_id'] = $tmp_model->get('_street_id');
+				$data['to_street_id'] = $tmp_element->street_id;
 				//Wenn kein Element existiert
 				if(is_null($tmp_element)) {
 					$tmp_data = array();
@@ -312,7 +312,7 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 				$tmp_model = new CabsystemModelsDestination_city();
 				$tmp_model->set('_name',$data['from_flight_id-other']);
 				$tmp_element = $tmp_model->getItem();
-				$data['from_flight_id'] = $tmp_model->get('_city_id');
+				$data['from_flight_id'] = $tmp_element->city_id;
 				//Wenn kein Element existiert
 				if(is_null($tmp_element)) {
 					$tmp_data = array();
@@ -325,6 +325,57 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 			}
 			else {
 				$data['from_flight_id'] = NULL;
+			}
+		}
+		unset($tmp_element);
+
+		if($data['flight_number'] == 'other') {
+			if(!empty($data['flight_number-other'])) {
+				//neues Element erzeugen
+				$tmp_model = new CabsystemModelsFlight();
+				$tmp_model->set('_flightnumber',$data['flight_number-other']);
+				$tmp_model->set('_city_id',$data['from_flight_id']);
+				$tmp_element = $tmp_model->getItem();
+				$data['flight_number'] = $tmp_element->flight_id;
+				//Wenn kein Element existiert
+				if(is_null($tmp_element)) {
+					$tmp_data = array();
+					$tmp_data['table'] = 'flights';
+					$tmp_data['flightnumber'] = $data['flight_number-other'];
+					$tmp_data['time'] = $data['time'];
+					$tmp_data['city_id'] = $data['from_flight_id'];
+					$tmp_model->store($tmp_data);
+					$tmp_element = $tmp_model->getItem();
+					$data['flight_number'] = $tmp_element->flight_id;
+				}
+			}
+			else {
+				$data['flight_number'] = NULL;
+			}
+		}
+		unset($tmp_element);
+
+		if($data['postorder_flight_number'] == 'other') {
+			if(!empty($data['postorder_flight_number-other'])) {
+				//neues Element erzeugen
+				$tmp_model = new CabsystemModelsFlight();
+				$tmp_model->set('_flightnumber',$data['postorder_flight_number-other']);
+				$tmp_model->set('_city_id',$data['postorder_from_flight_id']);
+				$tmp_element = $tmp_model->getItem();
+				$data['postorder_flight_number'] = $tmp_element->flight_id;
+				//Wenn kein Element existiert
+				if(is_null($tmp_element)) {
+					$tmp_data = array();
+					$tmp_data['table'] = 'flights';
+					$tmp_data['flightnumber'] = $data['postorder_flight_number-other'];
+					$tmp_data['city_id'] = $data['postorder_from_flight_id'];
+					$tmp_model->store($tmp_data);
+					$tmp_element = $tmp_model->getItem();
+					$data['postorder_flight_number'] = $tmp_element->flight_id;
+				}
+			}
+			else {
+				$data['postorder_flight_number'] = NULL;
 			}
 		}
 		unset($tmp_element);
@@ -361,6 +412,10 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 			if(empty($data['postorder_id'])) 
 			{
 				$data['postorder_id'] = NULL;
+			}
+			if(empty($data['flight_number']))
+			{
+				$data['flight_number'] = NULL;
 			}
 			if(empty($data['status'])) 
 			{
@@ -551,7 +606,9 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 			ad.name AS additionaladdresses_name,
 			ad.districts AS additional_address_districts_amount,
 			dr.name AS driver_name,
-			dr.email AS driver_email'
+			dr.email AS driver_email,
+			fl.flightnumber AS flight_number,
+			fl.flight_id AS flight_number_id'
 		);
 
 		$query->from('#__cabsystem_orders as o');
@@ -561,6 +618,7 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 		$query->leftjoin('#__cabsystem_streets as st on st.street_id = o.to_street_id');
 		$query->leftjoin('#__cabsystem_districts as dt on dt.district_id = st.district_id');
 		$query->leftjoin('#__cabsystem_cities as yt on yt.city_id = dt.city_id');
+		$query->leftjoin('#__cabsystem_flights as fl on fl.flight_id = o.flight_number');
 		$query->leftjoin('#__cabsystem_customers as c on c.customer_id = o.customer_id');
 		$query->leftjoin('#__cabsystem_customer_salutations as a on a.salutation_id = c.salutation_id');
 		$query->leftjoin('#__cabsystem_customer_titles as t on t.title_id = c.title_id');

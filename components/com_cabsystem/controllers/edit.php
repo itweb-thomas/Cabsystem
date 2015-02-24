@@ -113,6 +113,7 @@ class CabsystemControllersEdit extends JController
 					$additionaladdressModel = new CabsystemModelsAdditionaladdress();
 					$salutationModel = new CabsystemModelsSalutation();
 					$titleModel = new CabsystemModelsTitle();
+					$flightModel = new CabsystemModelsFlight();
 					
 					$additional_vars['streets'] = $streetModel->listItems();
 					$additional_vars['ordertypes'] = $ordertypeModel->listItems();
@@ -136,6 +137,13 @@ class CabsystemControllersEdit extends JController
 							$streetModel->_district_id = $district->district_id;
 							$district->streets = $streetModel->listItems();
 						}
+					}
+
+					//Alle Destinationen durchlaufen
+					foreach($additional_vars['destination_cities'] as &$destination_city) {
+						//Zu jedem Ort die Bezirke laden
+						$flightModel->_city_id = $destination_city->city_id;
+						$destination_city->flightnumbers = $flightModel->listItems();
 					}
 				break;	
 			}

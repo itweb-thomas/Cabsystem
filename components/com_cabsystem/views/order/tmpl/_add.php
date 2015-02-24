@@ -15,15 +15,15 @@
                     $district_array = array();
                     $street_array = array();
 
-                    $district_array['other'] = array();
-                    array_push($district_array['other'],array('id'=>'other','tag'=>'Anderer'));
+                    /*$district_array['other'] = array();
+                    array_push($district_array['other'],array('id'=>'other','tag'=>'Anderer'));*/
                     $street_array['other'] = array();
                     array_push($street_array['other'],array('id'=>'other','tag'=>'Andere'));
 
                     foreach($this->cities as $city) 
                     {
                         $district_array[$city->city_id] = array();
-                        array_push($district_array[$city->city_id],array('id'=>'other','tag'=>'Anderer'));
+                        //array_push($district_array[$city->city_id],array('id'=>'other','tag'=>'Anderer'));
 
                         foreach($city->districts as $district) 
                         {
@@ -38,9 +38,35 @@
                             }
                         }
                     }
+                    //Wenn KEIN Admin, dann nur Wiener Bezirke
+                    if (!JFactory::getUser()->authorise('cabsystem.admin', 'com_cabsystem')) {
+                        //Nur Wiener Bezirke = 121
+                        $all_districts_array = $district_array[121];
+                    }
                     echo '<input id="addForm-district-array" type="hidden" value="'.htmlentities(json_encode($district_array)).'"/>';
                     echo '<input id="addForm-street-array" type="hidden" value="'.htmlentities(json_encode($street_array)).'"/>';
                     echo '<input id="addForm-all-districts-array" type="hidden" value="'.htmlentities(json_encode($all_districts_array)).'"/>';
+                    ?>
+                    <?php
+                    $all_flightnumbers_array = array();
+                    $flightnumber_array = array();
+
+                    $flightnumber_array['other'] = array();
+                    array_push($flightnumber_array['other'],array('id'=>'other','tag'=>'Andere'));
+
+                    foreach($this->destination_cities as $destination_city)
+                    {
+                        $flightnumber_array[$destination_city->city_id] = array();
+                        array_push($flightnumber_array[$destination_city->city_id],array('id'=>'other','tag'=>'Andere'));
+
+                        foreach($destination_city->flightnumbers as $flightnumber)
+                        {
+                            array_push($flightnumber_array[$destination_city->city_id],array('id'=>$flightnumber->flight_id,'tag'=>$flightnumber->flightnumber));
+                            array_push($all_flightnumbers_array,array('id'=>$flightnumber->flight_id,'tag'=>$flightnumber->flightnumber));
+                        }
+                    }
+                    echo '<input id="addForm-flightnumber-array" type="hidden" value="'.htmlentities(json_encode($flightnumber_array)).'"/>';
+                    echo '<input id="addForm-all-flightnumbers-array" type="hidden" value="'.htmlentities(json_encode($all_flightnumbers_array)).'"/>';
                     ?>
                 
                     <div class="form-group">
@@ -63,7 +89,7 @@
                             <div class="col-md-9">
                                 <select class="form-control" name="from_city_id" id="addForm-from_city_id">
                                   <?php
-                                    echo '<option value="other">Anderer</option>';
+                                    //echo '<option value="other">Anderer</option>';
                                     foreach($this->cities as $city) {
                                         echo '<option value="'.$city->city_id.'">'.$city->name.'</option>';	
                                     }
@@ -120,7 +146,7 @@
                         <div class="form-group">
                             <label for="addForm-flight_number" class="col-md-3 control-label">Flugnr.</label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" id="addForm-flight_number" name="flight_number"/>
+                                <input type='hidden' class="form-control" name="flight_number" id="addForm-flight_number" />
                             </div>
                         </div>
                         
@@ -472,7 +498,7 @@
                             <div class="col-md-9">
                                 <select class="form-control" name="postorder_from_flight_id" id="addForm-postorder_from_flight_id">
                                   <?php
-                                    echo '<option value=""></option>';
+                                    echo '<option value="other">Andere</option>';
                                     foreach($this->destination_cities as $destination_city) {
                                         echo '<option value="'.$destination_city->city_id.'">'.$destination_city->name.'</option>';	
                                     }
@@ -483,7 +509,7 @@
                         <div class="form-group">
                             <label for="addForm-postorder_flight_number" class="col-md-3 control-label">Flugnr.</label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" id="addForm-postorder_flight_number" name="postorder_flight_number"/>
+                                <input type='hidden' class="form-control" name="postorder_flight_number" id="addForm-postorder_flight_number" />
                             </div>
                         </div>
                     </div>

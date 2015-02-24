@@ -23,6 +23,7 @@ class CabsystemViewsOrderHtml extends JView
 		$salutationModel = new CabsystemModelsSalutation();
 		$titleModel = new CabsystemModelsTitle();
 		$driverModel = new CabsystemModelsDriver();
+		$flightModel = new CabsystemModelsFlight();
 
 		switch($layout) {
 			case "list":
@@ -31,6 +32,7 @@ class CabsystemViewsOrderHtml extends JView
 				$this->cities = $cityModel->listItems();
 				$this->districts = $districtModel->listItems();
 				$this->streets = $streetModel->listItems();
+				$this->destination_cities = $destinationCityModel->listItems();
 				//Alle Orte durchlaufen
 				foreach($this->cities as &$city) {
 					//Zu jedem Ort die Bezirke laden
@@ -43,11 +45,17 @@ class CabsystemViewsOrderHtml extends JView
 						$district->streets = $streetModel->listItems();
 					}
 				}
+
+				//Alle Destinationen durchlaufen
+				foreach($this->destination_cities as &$destination_city) {
+					//Zu jedem Ort die Bezirke laden
+					$flightModel->_city_id = $destination_city->city_id;
+					$destination_city->flightnumbers = $flightModel->listItems();
+				}
 				
 				$this->salutations = $salutationModel->listItems();
 				$this->titles = $titleModel->listItems();
 				$this->ordertypes = $ordertypeModel->listItems();
-				$this->destination_cities = $destinationCityModel->listItems();
 				$this->cartypes = $cartypeModel->listItems();
 				$this->additionaladdresses = $additionaladdressModel->listItems();
 				$this->paymentmethods = $paymentmethodModel->listItems();

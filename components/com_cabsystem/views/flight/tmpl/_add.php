@@ -8,7 +8,7 @@
 
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
-				<h4 class="modal-title" id="addFlightModalLabel">Flug erstellen</h4>
+				<h4 class="modal-title" id="addFlightModalLabel">Flugnummer erstellen</h4>
 
 			</div>
 
