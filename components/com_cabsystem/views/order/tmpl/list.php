@@ -29,7 +29,11 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div>
-    
+
+    <button id="getCopyFromModalOrder" class="btn btn-default btn-sm"><i class="fa fa-file"></i>&nbsp;Kopieren (VOM Flughafen)</button>
+    <button id="getCopyToModalOrder" class="btn btn-default btn-sm"><i class="fa fa-file"></i>&nbsp;Kopieren (ZUM Fughafen)</button>
+
+
     <!-- HILFE BUTTON -->
     <button class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#helpModal">
       <i class="fa fa-question-circle"></i> Hilfe

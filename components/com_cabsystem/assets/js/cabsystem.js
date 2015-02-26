@@ -63,6 +63,7 @@ jQuery(document).ready(function()
 	if(jQuery('#dataTable').length) {
 		oTable = jQuery('#dataTable').dataTable(
 		{
+			"lengthMenu": [[ 25, 50, 100, 200, 500, -1 ],[ 25, 50, 100, 200, 500, 'Alle' ]],
 			"oLanguage": datatable_lang_array
 		}).on('draw.dt', function() {	
 			$(".setDriver").each(function() {

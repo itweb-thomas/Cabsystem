@@ -24,6 +24,7 @@ class CabsystemViewsOrderHtml extends JView
 		$titleModel = new CabsystemModelsTitle();
 		$driverModel = new CabsystemModelsDriver();
 		$flightModel = new CabsystemModelsFlight();
+		$lockoutModel = new CabsystemModelsLockout();
 
 		switch($layout) {
 			case "list":
@@ -60,10 +61,11 @@ class CabsystemViewsOrderHtml extends JView
 				$this->additionaladdresses = $additionaladdressModel->listItems();
 				$this->paymentmethods = $paymentmethodModel->listItems();
 				$this->drivers = $driverModel->listItems();
+				$this->lockouts = $lockoutModel->listItems();
 				
 				$this->_orderListView = CabsystemHelpersView::load('order', '_entry', 'phtml');
 
-				$this->_orderAddView = CabsystemHelpersView::load('order', '_add', 'phtml', array('streets'=>$this->streets,'ordertypes'=>$this->ordertypes,'cities'=>$this->cities,'districts'=>$this->districts,'destination_cities'=>$this->destination_cities,'cartypes'=>$this->cartypes,'additionaladdresses'=>$this->additionaladdresses,'paymentmethods'=>$this->paymentmethods,'salutations'=>$this->salutations,'titles'=>$this->titles,'drivers'=>$this->drivers));
+				$this->_orderAddView = CabsystemHelpersView::load('order', '_add', 'phtml', array('streets'=>$this->streets,'ordertypes'=>$this->ordertypes,'cities'=>$this->cities,'districts'=>$this->districts,'destination_cities'=>$this->destination_cities,'cartypes'=>$this->cartypes,'additionaladdresses'=>$this->additionaladdresses,'paymentmethods'=>$this->paymentmethods,'salutations'=>$this->salutations,'titles'=>$this->titles,'drivers'=>$this->drivers,'lockouts'=>$this->lockouts));
 
 				break;
 		}

@@ -355,6 +355,29 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 		}
 		unset($tmp_element);
 
+		if($data['postorder_from_flight_id'] == 'other') {
+			if(!empty($data['postorder_from_flight_id-other'])) {
+				//neues Element erzeugen
+				$tmp_model = new CabsystemModelsDestination_city();
+				$tmp_model->set('_name',$data['postorder_from_flight_id-other']);
+				$tmp_element = $tmp_model->getItem();
+				$data['postorder_from_flight_id'] = $tmp_element->city_id;
+				//Wenn kein Element existiert
+				if(is_null($tmp_element)) {
+					$tmp_data = array();
+					$tmp_data['table'] = 'destination_cities';
+					$tmp_data['name'] = $data['postorder_from_flight_id-other'];
+					$tmp_model->store($tmp_data);
+					$tmp_element = $tmp_model->getItem();
+					$data['postorder_from_flight_id'] = $tmp_element->city_id;
+				}
+			}
+			else {
+				$data['postorder_from_flight_id'] = NULL;
+			}
+		}
+		unset($tmp_element);
+
 		if($data['postorder_flight_number'] == 'other') {
 			if(!empty($data['postorder_flight_number-other'])) {
 				//neues Element erzeugen

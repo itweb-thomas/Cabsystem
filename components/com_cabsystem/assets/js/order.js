@@ -15,6 +15,7 @@ from_data_postorder_flightnumber['add'] = new Array();
 from_data_postorder_flightnumber['edit'] = new Array();
 var act_price = 0;
 var night_price = 0;
+var lockouts_array = new Array();
 
 var INVALID_SAME_TYPE = 'Eine Fahrt von dieser Adresse zur gleichen ist nicht zulässig!';
 var INVALID_NO_AIRPORT = 'Der Flughafen muss entweder als Abfahrtspunkt oder Ziel angegeben werden.';
@@ -30,7 +31,7 @@ var date_search_flag = "asc";
 function format(item) { return item.tag; }
 		
 $(document).ready(function()
-{	
+{
 	if(oTable) {
 		oTable.fnSetColumnVis( 1, false );
 		oTable.fnSetColumnVis( 4, false );
@@ -86,6 +87,8 @@ $(document).ready(function()
 	//Alle Buttons deaktivieren, die eine Auswahl benoetigen
 	$('#getDeleteModalOrder').attr("disabled", true);
 	$('#getEditModalOrder').attr("disabled", true);
+	$('#getCopyFromModalOrder').attr("disabled", true);
+	$('#getCopyToModalOrder').attr("disabled", true);
 	$('#getSetDriverModalOrder').attr("disabled", true);
 	$('#cancelOrder').attr("disabled", true);
 	
@@ -118,6 +121,16 @@ $(document).ready(function()
 	$('#getEditModalOrder').click( function(e) 
 	{
 		getEditOrderModal();
+	});
+	//COPY FROM Button
+	$('#getCopyFromModalOrder').click( function(e)
+	{
+		getCopyFromOrderModal();
+	});
+	//COPY TO Button
+	$('#getCopyToModalOrder').click( function(e)
+	{
+		getCopyToOrderModal();
 	});
 
 	//SETDRIVER Button
@@ -156,6 +169,8 @@ function cancelOrder()
 					selected_driver_id = null;
 					$('#getDeleteModalOrder').attr("disabled", true);
 					$('#getEditModalOrder').attr("disabled", true);
+					$('#getCopyFromModalOrder').attr("disabled", true);
+					$('#getCopyToModalOrder').attr("disabled", true);
 					$('#getSetDriverModalOrder').attr("disabled", true);
 					$('#cancelOrder').attr("disabled", true);
 					var tr = $(result.tr);
@@ -211,6 +226,8 @@ function setDriver(orderid, driverid)
 					selected_driver_id = null;
 					$('#getDeleteModalOrder').attr("disabled", true);
 					$('#getEditModalOrder').attr("disabled", true);
+					$('#getCopyFromModalOrder').attr("disabled", true);
+					$('#getCopyToModalOrder').attr("disabled", true);
 					$('#getSetDriverModalOrder').attr("disabled", true);
 					$('#cancelOrder').attr("disabled", true);
 					
@@ -352,7 +369,7 @@ function resetForm(type) {
 		displayPrice(0,type);
 	}
 	//Der EDIT Wizard wird nicht reseted sondern komplett entfernt
-	else if(type == 'edit') {
+	else if(type == 'edit' || type == 'copy') {
 		//HIER PASSIERT NICHTS - das wird alles gemacht wenn ein neuer EDIT Modal Wizard geholt wird
 	}
 }
@@ -363,17 +380,46 @@ function initOtherOption() {
 		//Darunter Textfeld hinzufuegen
 		$('<input type="text" name="'+$(this).attr('name')+'-other" id="'+$(this).attr('id')+'-other" class="form-control"/>').insertAfter($(this));
 		//Validation Rule hinzufuegen wenn es fuer das Select2 eine gab
-		//TODO
+		if($('#'+$(this).attr('id')).rules()) {
+			$('#'+$(this).attr('id')+'-other').rules( "remove");
+			$('#'+$(this).attr('id')+'-other').rules( "add", {
+				required: true,
+				messages: {
+					required: "Bitte füllen Sie dieses Feld aus"
+				}
+			});
+		}
 	}
 	//Wenn value != other
 	else {
 		//Textfeld entfernen (falls existent)
-		if($('#'+$(this).attr('id')+'-other').length >= 0) {
+		if($('#'+$(this).attr('id')+'-other').length > 0) {
+			//Validation Rule entfernen (falls existent)
+			if($('#' + $(this).attr('id') + '-other').rules()) {
+				$('#' + $(this).attr('id') + '-other').rules("remove");
+			}
 			$('#'+$(this).attr('id')+'-other').remove();
 		}
-		//Validation Rule entfernen (falls existent)
-		//TODO
 	}
+}
+
+function checkLockouts(type) {
+	if(type == 'add') {
+		//alle gesperrten Stunden durchgehen
+		for (var i = 0; i < lockouts_array.length; i++) {
+			//[year, month, day, hour, minute, second, millisecond]
+			var time = moment(moment().format('YYYY-MM-DD') + ' ' + $('#' + type + 'Form-time').val());
+			var from = moment().set('hour', lockouts_array[i]).set('seconds', 0).set('minutes', 0);
+			var to = moment().set('hour', ((parseInt(lockouts_array[i]) + 1))).set('seconds', 0).set('minutes', 0);
+
+			//Wenn ZEIT in den gesperrten Stunden liegt - nicht valide
+			if ((time.isAfter(from) || time.isSame(from)) && (time.isSame(to) || time.isBefore(to))) {
+				return false;
+			}
+		}
+		return true;
+	}
+	return true;
 }
 
 function initForm(type) {
@@ -381,6 +427,11 @@ function initForm(type) {
 		$("#"+type+"OrderModal").on('show.bs.modal', function (e) {
 		  $("#"+type+"OrderModal").appendTo('body');
 		});
+	}
+
+	if(type == 'add') {
+		//Sperren miteinbeziehen
+		lockouts_array = JSON.parse($('#'+type+'Form-lockouts-array').val());
 	}
 	
 	//ENTER Key abfangen
@@ -391,6 +442,10 @@ function initForm(type) {
 			//TODO Aktion einfuegen
 		}
 	});
+
+	jQuery.validator.addMethod("lockout", function(value, element) {
+		return checkLockouts(type);
+	}, "Eine Buchung zu diesem Zeitpunkt ist aufgrund der aktuellen Auslastung leider nicht möglich.");
 	
 	//Form Validation hinzufuegen
 	$("#"+type+"OrderForm").validate({
@@ -448,7 +503,8 @@ function initForm(type) {
 				required: true
 			},
 			"time": {
-				required: true
+				required: true,
+				lockout: true
 			},
 			"postorder_date": {
 				required: true
@@ -481,7 +537,10 @@ function initForm(type) {
 			postorder_from_flight_id: "Bitte geben Sie das Land an aus dem Ihr Flug kommt",
 			postorder_flight_number: "Bitte geben Sie die Flugnummer für die Rückfahrt ein",
 			date: "Bitte geben Sie ein Datum ein",
-			time: "Bitte geben Sie eine Zeit ein",
+			time: {
+				required: "Bitte geben Sie eine Zeit ein",
+				lockout: "Eine Buchung zu diesem Zeitpunkt ist aufgrund der aktuellen Auslastung leider nicht möglich."
+			},
 			postorder_date: "Bitte geben Sie ein Datum für die Rückfahrt ein",
 			postorder_time: "Bitte geben Sie eine Zeit für die Rückfahrt ein",
 			tos_accepted: "Bitte akzeptieren Sie die AGBs"
@@ -492,7 +551,7 @@ function initForm(type) {
 	if($('#'+type+'Form-date-picker').data('min-date')) {
 		min_date = moment().subtract('days', 1);
 	}
-	
+
 	//Datetimepicker initialisieren
 	$('#'+type+'Form-date-picker').datetimepicker({
 		language: 'de',
@@ -512,7 +571,18 @@ function initForm(type) {
 		showToday: true,
 		defaultDate:"",
 		useCurrent: true,
-		pickDate: false
+		pickDate: false,
+		onGenerate:function(ct,$i){
+			var ind = specificDates.indexOf(ct.dateFormat('d/m/Y'));
+			$('.xdsoft_time_variant .xdsoft_time').show();
+			if(ind !== -1) {
+				$('.xdsoft_time_variant .xdsoft_time').each(function(index){
+					if(hoursToTakeAway[ind].indexOf(parseInt($(this).text())) !== -1)              {
+						$(this).hide();
+					}
+				});
+			}
+		}
 	});
 	
 	$('#'+type+'Form-flight_time-picker').datetimepicker({
@@ -570,6 +640,7 @@ function initForm(type) {
 		{
 			//Formularueberpruefungen
 			var valid = true;
+
 			//ROUTE
 			//von A nach B voruebergehend ausschließen
 			if(analyseType($('#'+type+'Form-to_ordertype_id').find(":selected").data("type")) == analyseType($('#'+type+'Form-from_ordertype_id').find(":selected").data("type")) && analyseType($('#'+type+'Form-to_ordertype_id').find(":selected").data("type")) == 'address') {
@@ -698,9 +769,14 @@ function initForm(type) {
 				
 				//Alle disabled Felder die mituebertragen werden sollen wieder disablen
 				$("#"+type+"Form-time-picker").data("DateTimePicker").disable();
-				
+
+				var controller_type = type;
+				if(type == 'copy') {
+					controller_type = 'add';
+				}
+
 				jQuery.ajax({
-					url: 'index.php?option=com_cabsystem&controller='+type+'&format=raw&tmpl=component'+"&from_ordertype_type="+analyseType($("#"+type+"Form-from_ordertype_id").find(":selected").data("type"))+"&to_ordertype_type="+analyseType($("#"+type+"Form-to_ordertype_id").find(":selected").data("type")),
+					url: 'index.php?option=com_cabsystem&controller='+controller_type+'&format=raw&tmpl=component'+"&from_ordertype_type="+analyseType($("#"+type+"Form-from_ordertype_id").find(":selected").data("type"))+"&to_ordertype_type="+analyseType($("#"+type+"Form-to_ordertype_id").find(":selected").data("type")),
 					type: "POST",
 					dataType: 'JSON',
 					data: orderInfo,
@@ -720,6 +796,8 @@ function initForm(type) {
 								selected_driver_id = null;
 								$('#getDeleteModalOrder').attr("disabled", true);
 								$('#getEditModalOrder').attr("disabled", true);
+								$('#getCopyFromModalOrder').attr("disabled", true);
+								$('#getCopyToModalOrder').attr("disabled", true);
 								$('#getSetDriverModalOrder').attr("disabled", true);
 								$('#cancelOrder').attr("disabled", true);
 							}
@@ -905,10 +983,13 @@ function initForm(type) {
 			$("#"+type+"Form-to_street_id").select2("val","",true);
 		});
 	}
-	
+
 	if(type == 'add') {
 		$("#"+type+"Form-from_ordertype_id").select2("val","");
 		$("#"+type+"Form-to_ordertype_id").select2("val","");
+	}
+	
+	if(type == 'add' || type == 'copy') {
 		$("#"+type+"Form-from_flight_id").select2("val","");
 		$("#"+type+"Form-postorder_from_flight_id").select2("val","");
 		$("#"+type+"Form-postorder").select2("val","0");
@@ -920,7 +1001,7 @@ function initForm(type) {
 	$('.ordertype_section_from').hide();
 	
 	//richtige ordertype_sections einblenden (NUR EDIT)
-	if(type == 'edit') {
+	if(type == 'edit' || type == 'copy') {
 		var datatype = analyseType($("#"+type+"Form-from_ordertype_id").find(":selected").data("type"));
 		if($('#'+type+'Form-from_ordertype_section_'+datatype).length > 0) {
 			$('#'+type+'Form-from_ordertype_section_'+datatype).show();
@@ -1104,7 +1185,7 @@ function initForm(type) {
 		$("#"+type+"Form-additionaladdresses_districts").empty();
 	});
 	
-	if(type == 'edit') {
+	if(type == 'edit' || type == 'copy') {
 		$('#'+type+'OrderForm').find('input.additionaladdresses_district').each(function() {
 			//Select2
 			$(this).select2({
@@ -1158,7 +1239,7 @@ function initForm(type) {
 	});
 	
 	//Wenn EDIT dann soll der Preis angezeigt werden
-	if(type == 'edit') {
+	if(type == 'edit' || type == 'copy') {
 		$('.'+type+'Form-pricedisplay').text(LANG_PRICE+' € '+jQuery.number(parseFloat($('#'+type+'Form-price').val()),2));
 	}	
 	
@@ -1233,7 +1314,7 @@ function initForm(type) {
 		getPrice(type);
 	});
 	
-	if(type == 'edit') {
+	if(type == 'edit' || type == 'copy') {
 		$("#"+type+"Form-child_seat").trigger("touchspin.updatesettings", {max: (3 - $("#"+type+"Form-maxi_cosi").val())});
 		$("#"+type+"Form-maxi_cosi").trigger("touchspin.updatesettings", {max: (3 - $("#"+type+"Form-child_seat").val())});
 	}
@@ -1249,10 +1330,10 @@ function initForm(type) {
 		getPrice(type);
 	});
 	$("#"+type+"Form-postorder_wrapper").hide();
-	if(type == 'edit') {
+	if(type == 'edit' || type == 'copy') {
 		$("#"+type+"Form-postorder").trigger('change');
 	}
-	if(type == 'add') {
+	if(type == 'add' || type == 'copy') {
 		$("#"+type+"Form-postorder_from_flight_id").select2('val','');
 		$("#"+type+"Form-postorder_from_flight_id").select2('enable',false);
 		$("#"+type+"Form-postorder_flight_number").val('');	
@@ -1284,6 +1365,8 @@ function changeSelectedOrderId(order_id,driver_id)
 		selected_driver_id = null;
 		$('#getDeleteModalOrder').attr("disabled", true);
 		$('#getEditModalOrder').attr("disabled", true);
+		$('#getCopyFromModalOrder').attr("disabled", true);
+		$('#getCopyToModalOrder').attr("disabled", true);
 		$('#getSetDriverModalOrder').attr("disabled", true);
 		$('#cancelOrder').attr("disabled", true);
 	}
@@ -1293,6 +1376,8 @@ function changeSelectedOrderId(order_id,driver_id)
 		selected_driver_id = driver_id;
 		$('#getDeleteModalOrder').attr("disabled", false);
 		$('#getEditModalOrder').attr("disabled", false);
+		$('#getCopyFromModalOrder').attr("disabled", false);
+		$('#getCopyToModalOrder').attr("disabled", false);
 		$('#getSetDriverModalOrder').attr("disabled", false);
 		$('#cancelOrder').attr("disabled", false);
 	}
@@ -1320,6 +1405,8 @@ function deleteOrder(order_id)
 					selected_order_id = null;
 					$('#getDeleteModalOrder').attr("disabled", true);
 					$('#getEditModalOrder').attr("disabled", true);
+					$('#getCopyToModalOrder').attr("disabled", true);
+					$('#getSetDriverModalOrder').attr("disabled", true);
 					$('#getSetDriverModalOrder').attr("disabled", true);
 					$('#cancelOrder').attr("disabled", true);
 					
@@ -1421,6 +1508,76 @@ function getEditOrderModal()
 					initForm('edit');
 					
 					$('#editOrderModal').modal('show');
+				}
+			}
+		});
+	}
+}
+
+function getCopyFromOrderModal()
+{
+	if(selected_order_id != null) {
+		jQuery.ajax({
+			url:'index.php?option=com_cabsystem&controller=edit&task=getEditModal&format=raw&tmpl=component&layout=_copy&copy_type=from',
+			type:'POST',
+			data: {
+				order_id: selected_order_id,
+				view: 'order',
+				model: 'Order',
+				item: 'order',
+				table: 'orders'
+			},
+			dataType: 'JSON',
+			success:function(result)
+			{
+				if(result.html)
+				{
+					if($('#copyOrderModal').length != 0) {
+						$('#copyOrderModal').replaceWith($(result.html));
+					}
+					else {
+						$(result.html).insertAfter( "#getCopyFromModalOrder" );
+					}
+
+					//EDIT Wizard initialisieren
+					initForm('copy');
+
+					$('#copyOrderModal').modal('show');
+				}
+			}
+		});
+	}
+}
+
+function getCopyToOrderModal()
+{
+	if(selected_order_id != null) {
+		jQuery.ajax({
+			url:'index.php?option=com_cabsystem&controller=edit&task=getEditModal&format=raw&tmpl=component&layout=_copy&copy_type=to',
+			type:'POST',
+			data: {
+				order_id: selected_order_id,
+				view: 'order',
+				model: 'Order',
+				item: 'order',
+				table: 'orders'
+			},
+			dataType: 'JSON',
+			success:function(result)
+			{
+				if(result.html)
+				{
+					if($('#copyOrderModal').length != 0) {
+						$('#copyOrderModal').replaceWith($(result.html));
+					}
+					else {
+						$(result.html).insertAfter( "#getCopyToModalOrder" );
+					}
+
+					//EDIT Wizard initialisieren
+					initForm('copy');
+
+					$('#copyOrderModal').modal('show');
 				}
 			}
 		});

@@ -61,6 +61,7 @@ class CabsystemControllersEdit extends JController
 				$additional_vars['<<MEHRZAHL DES MODELTITELS>>'] = $additional_model_model->listItems();
 			}
 			*/
+
 			$additional_vars = array();
 			switch ($item) 
 			{
@@ -103,6 +104,73 @@ class CabsystemControllersEdit extends JController
 					$additional_vars['titles'] = $titleModel->listItems();
 				break;
 				case 'order':
+					//Wenn COPY dann evtl FROM und TO vertauschen
+					if($layout == '_copy') {
+						//Angeforderte Richtung holen
+						$copy_type = $app->input->get('copy_type');
+
+						//Aktuelle Richtung ermitteln
+						$act_direction = '';
+						if($row->from_ordertype_id == 2) {
+							$act_direction = 'from';
+						}
+						else if($row->to_ordertype_id == 2) {
+							$act_direction = 'to';
+						}
+
+						//Wenn geforderte Richtung mit aktueller nicht uebereinstimmt - WECHSEL
+						if($copy_type != $act_direction) {
+							$TMP_from_ordertype_id = $row->from_ordertype_id;
+							$TMP_from_street_id = $row->from_street_id;
+							$TMP_from_street_name = $row->from_street_name;
+							$TMP_from_district_id = $row->from_district_id;
+							$TMP_from_district_name = $row->from_district_name;
+							$TMP_from_district_zip = $row->from_district_zip;
+							$TMP_from_city_id = $row->from_city_id;
+							$TMP_from_city_name = $row->from_city_name;
+							$TMP_from_house = $row->from_house;
+							$TMP_from_stair = $row->from_stair;
+							$TMP_from_door = $row->from_door;
+
+							$row->from_ordertype_id = $row->to_ordertype_id;
+							$row->from_street_id = $row->to_street_id;
+							$row->from_street_name = $row->to_street_name;
+							$row->from_district_id = $row->to_district_id;
+							$row->from_district_name = $row->to_district_name;
+							$row->from_district_zip = $row->to_district_zip;
+							$row->from_city_id = $row->to_city_id;
+							$row->from_city_name = $row->to_city_name;
+							$row->from_house = $row->to_house;
+							$row->from_stair = $row->to_stair;
+							$row->from_door = $row->to_door;
+
+							$row->to_ordertype_id = $TMP_from_ordertype_id;
+							$row->to_street_id = $TMP_from_street_id;
+							$row->to_street_name = $TMP_from_street_name;
+							$row->to_district_id = $TMP_from_district_id;
+							$row->to_district_name = $TMP_from_district_name;
+							$row->to_district_zip = $TMP_from_district_zip;
+							$row->to_city_id = $TMP_from_city_id;
+							$row->to_city_name = $TMP_from_city_name;
+							$row->to_house = $TMP_from_house;
+							$row->to_stair = $TMP_from_stair;
+							$row->to_door = $TMP_from_door;
+
+							//Rueckfahrtoptionen zuruecksetzen
+							unset($row->postorder_id);
+							unset($row->preorder_id);
+
+							//Customer ID zuruecksetzen
+							unset($row->customer_id);
+
+							//ID zuruecksetzen
+							unset($row->order_id);
+
+							//created/modified zuruecksetzen
+							unset($row->created);
+							unset($row->modified);
+						}
+					}
 					$cityModel = new CabsystemModelsCity();
 					$destinationCityModel = new CabsystemModelsDestination_city();
 					$districtModel = new CabsystemModelsDistrict();
@@ -114,6 +182,7 @@ class CabsystemControllersEdit extends JController
 					$salutationModel = new CabsystemModelsSalutation();
 					$titleModel = new CabsystemModelsTitle();
 					$flightModel = new CabsystemModelsFlight();
+					$lockoutModel = new CabsystemModelsLockout();
 					
 					$additional_vars['streets'] = $streetModel->listItems();
 					$additional_vars['ordertypes'] = $ordertypeModel->listItems();
@@ -125,6 +194,7 @@ class CabsystemControllersEdit extends JController
 					$additional_vars['paymentmethods'] = $paymentmethodModel->listItems();
 					$additional_vars['salutations'] = $salutationModel->listItems();
 					$additional_vars['titles'] = $titleModel->listItems();
+					$additional_vars['lockouts'] = $lockoutModel->listItems();
 					
 					//Alle Orte durchlaufen
 					foreach($additional_vars['cities'] as &$city) {

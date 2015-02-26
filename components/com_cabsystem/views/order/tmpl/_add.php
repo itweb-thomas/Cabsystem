@@ -68,6 +68,16 @@
                     echo '<input id="addForm-flightnumber-array" type="hidden" value="'.htmlentities(json_encode($flightnumber_array)).'"/>';
                     echo '<input id="addForm-all-flightnumbers-array" type="hidden" value="'.htmlentities(json_encode($all_flightnumbers_array)).'"/>';
                     ?>
+                    <?php
+                    $lockouts_array = array();
+                    foreach($this->lockouts as $lockout)
+                    {
+                        if($lockout->active == 1) {
+                            array_push($lockouts_array,$lockout->hour);
+                        }
+                    }
+                    echo '<input id="addForm-lockouts-array" type="hidden" value="'.htmlentities(json_encode($lockouts_array)).'"/>';
+                    ?>
                 
                     <div class="form-group">
                         <label for="addForm-from_ordertype_id" class="col-md-3 control-label">Von</label>
