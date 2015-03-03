@@ -406,11 +406,18 @@ function initOtherOption() {
 function checkLockouts(type) {
 	if(type == 'add') {
 		//alle gesperrten Stunden durchgehen
+		//alert($('#' + type + 'Form-date').val() + ' ' + $('#' + type + 'Form-time').val());
+
 		for (var i = 0; i < lockouts_array.length; i++) {
+			//alert(lockouts_array[i].date + ' ' + lockouts_array[i].hour+':00:00' + ' - ' +lockouts_array[i].date + ' ' + ((parseInt(lockouts_array[i].hour) + 1))+':00:00');
 			//[year, month, day, hour, minute, second, millisecond]
-			var time = moment(moment().format('YYYY-MM-DD') + ' ' + $('#' + type + 'Form-time').val());
-			var from = moment().set('hour', lockouts_array[i]).set('seconds', 0).set('minutes', 0);
-			var to = moment().set('hour', ((parseInt(lockouts_array[i]) + 1))).set('seconds', 0).set('minutes', 0);
+			var time = moment($('#' + type + 'Form-date').val() + ' ' + $('#' + type + 'Form-time').val());
+			var from = moment(lockouts_array[i].date).set('hour',lockouts_array[i].hour);
+			var to = moment(lockouts_array[i].date).set('hour',((parseInt(lockouts_array[i].hour) + 1)));
+
+			console.log(time);
+			console.log(from);
+			console.log(to);
 
 			//Wenn ZEIT in den gesperrten Stunden liegt - nicht valide
 			if ((time.isAfter(from) || time.isSame(from)) && (time.isSame(to) || time.isBefore(to))) {
@@ -445,7 +452,7 @@ function initForm(type) {
 
 	jQuery.validator.addMethod("lockout", function(value, element) {
 		return checkLockouts(type);
-	}, "Eine Buchung zu diesem Zeitpunkt ist aufgrund der aktuellen Auslastung leider nicht möglich.");
+	}, "Eine Buchung zu diesem Zeitpunkt an diesem Tag ist aufgrund der aktuellen Auslastung leider nicht möglich.");
 	
 	//Form Validation hinzufuegen
 	$("#"+type+"OrderForm").validate({

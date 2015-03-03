@@ -49,11 +49,21 @@ class CabsystemModelsLockout extends CabsystemModelsDefault
 	}
 
 	function store($data=null) {
+		$data = $data ? $data : JRequest::get('post');
+		if(isset($data['active'])) {
+			$data['active'] = 1;
+		}
+		else {
+			$data['active'] = 0;
+		}
+
 		$row = parent::store($data);
+		$this->id = $row->lockout_id;
+		$this->_lockout_id = $row->lockout_id;
 		
 		$result = array();
 		$result['row'] = $row;
-		$result['tr'] = CabsystemHelpersView::getHtml('lockout', '_entry', 'lockout', $this->getItem());
+		$result['tr'] = CabsystemHelpersView::getHtml('lockout', '_entry', 'lockout', self::getItem());
 		return $result;
 	}
 

@@ -1,8 +1,8 @@
 var oTable;
 var oTableD;
 var oTables;
-var icon_active = '<i class="icon-sm icon-active fa fa-check-circle"></i>';
-var icon_inactive = '<i class="icon-sm icon-inactive fa fa-minus-circle"></i>';
+var icon_active = '<i class="icon-sm icon-active fa fa-check-circle"></i>&nbsp;System ist frei';
+var icon_inactive = '<i class="icon-sm icon-inactive fa fa-minus-circle"></i>&nbsp;System ist gesperrt';
 var datatable_lang_array = null;
 
 jQuery(document).ready(function()

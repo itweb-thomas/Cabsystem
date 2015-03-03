@@ -73,7 +73,7 @@
                     foreach($this->lockouts as $lockout)
                     {
                         if($lockout->active == 1) {
-                            array_push($lockouts_array,$lockout->hour);
+                            array_push($lockouts_array,array('date'=>date("Y-m-d", strtotime($lockout->date)),'hour'=>$lockout->hour));
                         }
                     }
                     echo '<input id="addForm-lockouts-array" type="hidden" value="'.htmlentities(json_encode($lockouts_array)).'"/>';
@@ -192,7 +192,7 @@
                             <div class="col-md-9">
                                 <select class="form-control" name="to_city_id" id="addForm-to_city_id">
                                   <?php
-                                    echo '<option value="other">Anderer</option>';
+                                    //echo '<option value="other">Anderer</option>';
                                     foreach($this->cities as $city) {
                                         echo '<option value="'.$city->city_id.'">'.$city->name.'</option>';	
                                     }

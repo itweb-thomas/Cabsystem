@@ -1,43 +1,57 @@
 var selected_lockout_id = null;
+var date_search_flag = "asc";
 
 $(document).ready(function()
 {
+	oTable.fnSetColumnVis( 0, false );
+
+	oTable.fnSort( [[0,'asc']] );
+
+	//Nach Datum sortieren einbauen
+	table = $('#dataTable').DataTable();
+	var header = table.column(1).header();
+	$(header).on('click',function(event) {
+		if(date_search_flag == "desc") {
+			date_search_flag = "asc";
+		}
+		else if(date_search_flag == "asc") {
+			date_search_flag = "desc";
+		}
+		oTable.fnSort( [0,date_search_flag] );
+	});
+
 	//Alle Buttons deaktivieren, die eine Auswahl benoetigen
 	$('#getDeleteModalLockout').attr("disabled", true);
 	$('#getEditModalLockout').attr("disabled", true);
 	$('#lockLockout').attr("disabled", true);
 	$('#unlockLockout').attr("disabled", true);
 
-	//Select2 initalisieren
-	$("#addForm-cartype_id").select2();
-
 	//Listener fuer die TR der DataTable erzeugen
 	oTable.$('tr').on('click',function(event) {
 		changeSelectedLockoutId($(this).attr('data-lockout_id'));
 	});
 
-	//Form Validation hinzufuegen
-	$("#addLockoutForm").validate({
-		rules: {
-			"name": {
-				required: true
-			},
-			"email": {
-				required: true,
-				email: true
-			},
-			"cartype_id": {
-				required: true
-			}
-		},
-		messages: {
-			name: "Bitte geben Sie den Namen an",
-			email: {
-				required: "Bitte geben Sie die Email Adresse an",
-				email: "Die Email Adresse muss die Form name@domain.com haben"
-			},
-			cartype_id: "Bitte geben Sie den Autotyp an"
-		}
+	initForm('add');
+
+	$('#deleteLockout').click( function(e)
+	{
+		deleteLockout();
+	});
+
+	$('#getEditModalLockout').click( function(e)
+	{
+		getEditLockoutModal();
+	});
+
+	$('#lockLockout').click( function(e) 
+	{
+		lockLockout();
+	});
+
+
+	$('#unlockLockout').click( function(e) 
+	{
+		unlockLockout();
 	});
 
 	//ENTER Key abfangen
@@ -61,28 +75,46 @@ $(document).ready(function()
 		}
 	});
 
-	$('#deleteLockout').click( function(e)
-	{
-		deleteLockout();
-	});
-
-	$('#getEditModalLockout').click( function(e)
-	{
-		getEditLockoutModal();
-	});
-
-	$('#lockLockout').click( function(e) 
-	{
-		lockLockout();
-	});
-
-
-	$('#unlockLockout').click( function(e) 
-	{
-		unlockLockout();
-	});
-
 });
+
+function initForm(type) {
+	//Select2 + Datepicker initalisieren
+
+	var min_date = '1/1/1900';
+	if($('#'+type+'Form-date-picker').data('min-date')) {
+		min_date = moment().subtract('days', 1);
+	}
+
+	//Datetimepicker initialisieren
+	$('#'+type+'Form-date-picker').datetimepicker({
+		language: 'de',
+		pick12HourFormat: false,
+		minuteStepping:5,
+		showToday: true,
+		defaultDate:"",
+		useCurrent: true,
+		pickTime: false,
+		minDate:min_date
+	});
+
+	$("#"+type+"Form-hour").select2();
+
+	//Form Validation hinzufuegen
+	$("#"+type+"LockoutForm").validate({
+		rules: {
+			"date": {
+				required: true
+			},
+			"hour": {
+				required: true
+			}
+		},
+		messages: {
+			date: "Bitte geben Sie das Datum an",
+			hour: "Bitte geben Sie den Zeitraum an"
+		}
+	});
+}
 
 //die aktuell ausgewaehlte ID speichern und je nachdem die Buttons aktivieren/deaktivieren
 function changeSelectedLockoutId(lockout_id) 
@@ -109,23 +141,7 @@ function addLockout()
 {
 	$('#addLockout').attr("disabled", true);
 	//Informationen des Fahrers aus dem Form ziehen
-	var lockoutInfo = {};
-	jQuery("#addLockoutForm :input").each(function(idx,ele)
-	{
-		if (jQuery(ele).attr('type') == 'checkbox')
-		{
-			if(jQuery(ele).is(":checked")) {
-				lockoutInfo[jQuery(ele).attr('name')] = 1;
-			}
-			else {
-				lockoutInfo[jQuery(ele).attr('name')] = 0;
-			}
-		}
-		else
-		{
-			lockoutInfo[jQuery(ele).attr('name')] = jQuery(ele).val();
-		}
-	});
+	var lockoutInfo = $("#addLockoutForm").serialize();
 
 	//Ajax Request schicken
 	jQuery.ajax({
@@ -138,31 +154,21 @@ function addLockout()
 			if ( result.success ){
 				//Notification ausgeben
 				$.notify(result.msg, "success");
-				
-				//Icon fuer aktiv/inaktiv zusammenbauen
-				var active = icon_inactive;
-				if(result.datatable_data.active == 1) {
-					active = icon_active;
-				}
-				
-				//Zeile zu DataTable hinzufuegen
-				var added_indexes = jQuery('#dataTable').dataTable().fnAddData( [
-					active,
-					result.datatable_data.name,
-					result.datatable_data.email,
-					result.datatable_data.cartype_name]
-				);
-				var added_trs = oTable.fnGetNodes(added_indexes[0]);
-				
-				//Gerade hinzugefuegter Zeile das Attribut mit der ID geben
-				$(added_trs).attr('data-lockout_id',result.datatable_data.lockout_id);
-				
-				//Gerade hinzugefuegter Zeile den EventListener anhaengen
-				$(added_trs).click(function(event) {
+
+				var tr = $(result.tr);
+
+				//Zeile das Attribut mit der ID geben
+				tr.attr('data-lockout_id',result.datatable_data.lockout_id);
+
+				//Zeile den EventListener anhaengen
+				tr.click(function(event) {
 					changeSelectedLockoutId($(this).attr('data-lockout_id'));
 				});
+
+				oTable.fnAddTr(tr[0]);
 				
 				//Modal verstecken
+				$("#addLockoutModal").insertAfter('getAddModalOrder');
 				jQuery("#addLockoutModal").modal('hide');
 			}else{
 				$.notify(result.msg, "error");
@@ -225,7 +231,7 @@ function lockLockout(lockout_id)
 					$.notify(result.msg, "success");
 					var anSelected = getSelectedDataTableRow( oTable );
 					if ( anSelected.length !== 0 ) {
-						oTable.fnUpdate(icon_inactive, anSelected[0], 1,false,false);
+						oTable.fnUpdate(icon_inactive, anSelected[0], 3,false,false);
 					}
 				}
 				else {
@@ -251,7 +257,7 @@ function unlockLockout(lockout_id)
 					$.notify(result.msg, "success");
 					var anSelected = getSelectedDataTableRow( oTable );
 					if ( anSelected.length !== 0 ) {
-						oTable.fnUpdate(icon_active, anSelected[0], 1,false,false);
+						oTable.fnUpdate(icon_active, anSelected[0], 3,false,false);
 					}
 				}
 				else {
@@ -287,40 +293,15 @@ function getEditLockoutModal()
 						$(result.html).insertAfter( "#getEditModalLockout" );
 					}
 					$('#editLockoutModal').modal('show');
-					
-					//Select2 initalisieren
-					$("#editForm-cartype_id").select2();
-					
-					//Form Validation
-					$("#editLockoutForm").validate({
-						rules: {
-							"name": {
-								required: true,
-							},
-							"email": {
-								required: true,
-								email: true
-							},
-							"cartype_id": {
-								required: true
-							}
-						},
-						messages: {
-							name: "Bitte geben Sie den Namen an",
-							email: {
-								required: "Bitte geben Sie die Email Adresse an",
-								email: "Die Email Adresse muss die Form name@domain.com haben"
-							},
-							cartype_id: "Bitte geben Sie den Autotyp an"
-						}
-					});
+
+					initForm('edit');
 					
 					//ENTER Key abfangen
-					$("#editLockoutModal").keypress(function( event ) 
+					$("#editLockoutModal").keypress(function( event )
 					{
 						if ( event.which == 13 ) {
 							event.preventDefault();
-							if($('#editLockoutForm').valid()) 
+							if($('#editLockoutForm').valid())
 							{
 								editLockout();
 							}
@@ -343,23 +324,7 @@ function getEditLockoutModal()
 function editLockout()
 {
 	$('#editLockout').attr("disabled", true);
-	var lockoutInfo = {};
-	jQuery("#editLockoutForm :input").each(function(idx,ele)
-	{
-		if (jQuery(ele).attr('type') == 'checkbox')
-		{
-			if(jQuery(ele).is(":checked")) {
-				lockoutInfo[jQuery(ele).attr('name')] = 1;
-			}
-			else {
-				lockoutInfo[jQuery(ele).attr('name')] = 0;
-			}
-		}
-		else
-		{
-			lockoutInfo[jQuery(ele).attr('name')] = jQuery(ele).val();
-		}
-	});
+	var lockoutInfo = $("#editLockoutForm").serialize();
 
 	jQuery.ajax({
 		url:'index.php?option=com_cabsystem&controller=edit&format=raw&tmpl=component',
@@ -369,19 +334,33 @@ function editLockout()
 		success:function(result)
 		{
 			if ( result.success ){
+				//Notification ausgeben
 				$.notify(result.msg, "success");
-				var active = icon_inactive;
-				if(result.datatable_data.active == 1) {
-					active = icon_active;
-				}
+
 				var anSelected = getSelectedDataTableRow( oTable );
 				if ( anSelected.length !== 0 ) {
-					oTable.fnUpdate([
-					active,
-					result.datatable_data.name,
-					result.datatable_data.email,
-					result.datatable_data.cartype_name], anSelected[0],undefined,false,false);
+					oTable.fnDeleteRow( anSelected[0] );
 				}
+
+				//Variable der aktuell selektierten TR auf null setzen und Buttons disablen
+				selected_lockout_id = null;
+				$('#getDeleteModalLockout').attr("disabled", true);
+				$('#getEditModalLockout').attr("disabled", true);
+				$('#cancelLockout').attr("disabled", true);
+
+				var tr = $(result.tr);
+
+				//Zeile das Attribut mit der ID geben
+				tr.attr('data-lockout_id',result.datatable_data.lockout_id);
+
+				//Zeile den EventListener anhaengen
+				tr.click(function(event) {
+					changeSelectedLockoutId($(this).attr('data-lockout_id'));
+				});
+
+				oTable.fnAddTr(tr[0]);
+
+				//Modal verstecken
 				jQuery("#editLockoutModal").modal('hide');
 			}else{
 				$.notify(result.msg, "error");

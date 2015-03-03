@@ -524,6 +524,7 @@
                 <?php
 					if(!empty($this->order->postorder_id)) {
 						echo '<div class="alert alert-info" role="alert">Zu dieser Fahrt wurde eine Rückfahrt gebucht (Nr.: '.$this->order->postorder_id.')</div>';
+                        echo '<input type="hidden" name="postorder_id" id="editForm-postorder_id" value="'.$this->order->postorder_id.'" />';
 					}
 				?>
 
