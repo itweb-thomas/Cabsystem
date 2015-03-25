@@ -16,7 +16,7 @@ class CabsystemControllersAjax extends JController
 			if($str == 't') $str = 'TRUE'; 
 			if($str == 'f') $str = 'FALSE'; 
 			// force certain number/date formats to be imported as strings 
-			if(preg_match("/^0/", $str) || preg_match("/^\+?\d{8,}$/", $str) || preg_match("/^\d{4}.\d{1,2}.\d{1,2}/", $str)) { $str = "'$str"; }
+			if(preg_match("/^0/", $str) || preg_match("/^\+?\d{8,}$/", $str) || preg_match("/^\d{1,2}.\d{1,2}.\d{4}/", $str)) { $str = "$str"; }
 			
 			if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"'; 
 			$str = mb_convert_encoding($str, 'UTF-16LE', 'UTF-8');
@@ -78,7 +78,7 @@ class CabsystemControllersAjax extends JController
 				foreach($orders as $order) {
 					$item = array();
 					foreach($data['fields'] as $field) {	
-						$field_value = '""';		
+						$field_value = '""';
 						switch($field) {
 							case 'id':
 								$field_value = $order->order_id;

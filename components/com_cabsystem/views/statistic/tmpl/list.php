@@ -40,13 +40,13 @@
         </div>
         <div class="col-md-4">
         	<label class="control-label">&nbsp;</label>
-        	<button id="export2" type="submit" class="btn btn-primary pull-right form-control">Exportieren und als .csv herunterladen</button>
+        	<button id="export2" type="submit" class="btn btn-primary pull-right form-control">Exportieren und als .xls herunterladen</button>
         </div>
 	</div>
 </div>
 <div class="panel panel-default">
 	<div class="panel-body">
-		<p>Welche Felder sollen in der exportierten CSV Datei angezeigt werden?</p>
+		<p>Welche Felder sollen in der exportierten XLS Datei angezeigt werden?</p>
         <div class="row">
             <div class="col-md-4">
                 <div class="checkbox"><label><input type="checkbox" name="fields[]" value="id"> Nummer</label></div>

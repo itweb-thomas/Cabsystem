@@ -51,6 +51,12 @@
     <?php echo (!empty($this->order->driver_name)) ? mb_substr($this->order->driver_name,0,11) : 'Kein Fahrer';?> <span class="caret"></span></button>
       <ul class="dropdown-menu" role="menu">
 		<?php
+			if(empty($this->order->driver_id)) {
+				echo '<li><a class="setDriver" data-orderid="'.$this->order->order_id.'" data-driverid=""><strong>Kein Fahrer</strong></a></li>';
+			}
+			else {
+				echo '<li><a class="setDriver" data-orderid="'.$this->order->order_id.'" data-driverid="">Kein Fahrer</a></li>';
+			}
 			foreach($drivers as $driver) {
 				if($driver->driver_id == $this->order->driver_id) {
 					echo '<li><a class="setDriver" data-orderid="'.$this->order->order_id.'" data-driverid="'.$driver->driver_id.'"><strong>'.$driver->name.'</strong></a></li>';	

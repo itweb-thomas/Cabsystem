@@ -527,10 +527,22 @@
                         echo '<input type="hidden" name="postorder_id" id="editForm-postorder_id" value="'.$this->order->postorder_id.'" />';
 					}
 				?>
+                <?php
+                    if(!empty($this->order->preorder_id)) {
+                        echo '<div class="alert alert-info" role="alert">Das ist die Rückfahrt zu Fahrt Nr.: '.$this->order->preorder_id.'</div>';
+                        echo '<input type="hidden" name="preorder_id" id="editForm-preorder_id" value="'.$this->order->preorder_id.'" />';
+                    }
+                ?>
+                <?php
+                    if(!empty($this->order->driver_id)) {
+                        echo '<input type="hidden" name="driver_id" id="editForm-driver_id" value="'.$this->order->driver_id.'" />';
+                    }
+                ?>
 
                 <input type="hidden" name="created" id="editForm-created" value="<?php echo $this->order->created; ?>" />
                 <input type="hidden" name="price" id="editForm-price" value="<?php echo $this->order->price; ?>" />
 				<input type="hidden" name="order_id" value="<?php echo $this->order->order_id; ?>" />
+                <input type="hidden" name="status" value="<?php echo $this->order->status; ?>" />
                 
                 <input type="hidden" name="view" value="order" />
                 <input type="hidden" name="model" value="Order" />

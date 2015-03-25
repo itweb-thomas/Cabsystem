@@ -59,8 +59,11 @@
 
 						</div>
 
-					</div> 
-                    <input type="hidden" name="view" value="lockout" />
+					</div>
+					<div class="alert alert-info" role="alert">
+						<strong>Hinweis: </strong>Wenn mehrere Sperren für den gleichen Zeitpunkt gespeichert wurden zählt immer jene, die das System auch wirklich sperrt
+					</div>
+					<input type="hidden" name="view" value="lockout" />
                     <input type="hidden" name="model" value="Lockout" />
                     <input type="hidden" name="item" value="lockout" />
                     <input type="hidden" name="table" value="lockouts" />

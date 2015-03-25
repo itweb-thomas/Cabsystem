@@ -31,6 +31,14 @@ $(document).ready(function()
 	$("#uncheck-all").click(function () {
 		$(".checkbox input").prop('checked', false);
 	});
+
+	jQuery("#export-form").submit(function(e) {
+		if($(".checkbox input:checked").length <= 0) {
+			alert("Bitte geben Sie zumindest ein Feld an, das in der Ausgabedatei angezeigt werden soll.");
+			return false;
+		}
+		return true;
+	});
 	
 	/*$("#export").click(function () {
 		jQuery.ajax({

@@ -377,17 +377,23 @@ function resetForm(type) {
 function initOtherOption() {
 	//Wenn value == other
 	if($(this).select2('val') === "other") {
-		//Darunter Textfeld hinzufuegen
-		$('<input type="text" name="'+$(this).attr('name')+'-other" id="'+$(this).attr('id')+'-other" class="form-control"/>').insertAfter($(this));
-		//Validation Rule hinzufuegen wenn es fuer das Select2 eine gab
-		if($('#'+$(this).attr('id')).rules()) {
-			$('#'+$(this).attr('id')+'-other').rules( "remove");
-			$('#'+$(this).attr('id')+'-other').rules( "add", {
-				required: true,
-				messages: {
-					required: "Bitte füllen Sie dieses Feld aus"
-				}
-			});
+		//Darunter Textfeld hinzufuegen wenn noch nicht existiert
+		if($('#'+$(this).attr('id')+'-other').length <= 0) {
+			$('<input type="text" name="' + $(this).attr('name') + '-other" id="' + $(this).attr('id') + '-other" class="form-control"/>').insertAfter($(this));
+			//Validation Rule hinzufuegen wenn es fuer das Select2 eine gab
+			if ($('#' + $(this).attr('id')).rules()) {
+				$('#' + $(this).attr('id') + '-other').rules("remove");
+				$('#' + $(this).attr('id') + '-other').rules("add", {
+					required: true,
+					messages: {
+						required: "Bitte füllen Sie dieses Feld aus"
+					}
+				});
+			}
+		}
+		//Wenn Search-term uebernommen wurde
+		if ($('#' + $(this).attr('id')).data('search-term')) {
+			$('#' + $(this).attr('id') + '-other').val($('#' + $(this).attr('id')).data('search-term'));
 		}
 	}
 	//Wenn value != other
@@ -403,6 +409,21 @@ function initOtherOption() {
 	}
 }
 
+function initOtherOptionHandler(id) {
+	var select_element = $('#' + id);
+	console.log(select_element);
+	$($(select_element).data('select2').search).on('keyup', function(e) {
+		$(this).data('value',$(this).val());
+	});
+	$(select_element.data('select2').search).on('keydown', function(e) {
+		var keyCode = e.keyCode || e.which;
+		if (keyCode == 9) {
+			$(select_element).data('search-term',$(this).data('value'));
+			$(select_element).select2('val','other',true);
+		}
+	});
+}
+
 function checkLockouts(type) {
 	if(type == 'add') {
 		//alle gesperrten Stunden durchgehen
@@ -415,9 +436,9 @@ function checkLockouts(type) {
 			var from = moment(lockouts_array[i].date).set('hour',lockouts_array[i].hour);
 			var to = moment(lockouts_array[i].date).set('hour',((parseInt(lockouts_array[i].hour) + 1)));
 
-			console.log(time);
+			/*console.log(time);
 			console.log(from);
-			console.log(to);
+			console.log(to);*/
 
 			//Wenn ZEIT in den gesperrten Stunden liegt - nicht valide
 			if ((time.isAfter(from) || time.isSame(from)) && (time.isSame(to) || time.isBefore(to))) {
@@ -494,9 +515,9 @@ function initForm(type) {
 			"from_street_id": {
 				required: true
 			},
-			/*"from_flight_id": {
+			"from_flight_id": {
 				required: true
-			},*/
+			},
 			/*"to_flight_id": {
 				required: true
 			},*/
@@ -539,7 +560,7 @@ function initForm(type) {
 			to_city_id: "Bitte geben Sie den Zielort an",
 			to_district_id: "Bitte geben Sie den Zielbezirk an",
 			to_street_id: "Bitte geben Sie die Zieladresse an",
-			//from_flight_id: "Bitte geben Sie das Land an aus dem Ihr Flug kommt",
+			from_flight_id: "Bitte geben Sie das Land an aus dem Ihr Flug kommt",
 			//to_flight_id: "Bitte geben Sie die Flugnummer an",
 			postorder_from_flight_id: "Bitte geben Sie das Land an aus dem Ihr Flug kommt",
 			postorder_flight_number: "Bitte geben Sie die Flugnummer für die Rückfahrt ein",
@@ -689,11 +710,11 @@ function initForm(type) {
 			}
 			
 			//FROM Felder fuer TYPE flight checken
-			/*if(analyseType($("#"+type+"Form-from_ordertype_id").find(":selected").data("type")) == 'airport') {
+			if(analyseType($("#"+type+"Form-from_ordertype_id").find(":selected").data("type")) == 'airport') {
 				if(!$('#'+type+'Form-from_flight_id').valid()) {
 					valid = false;
 				}
-			}*/
+			}
 			
 			//TO Felder fuer TYPE flight checken
 			/*if(analyseType($("#"+type+"Form-to_ordertype_id").find(":selected").data("type")) == 'airport') {
@@ -787,6 +808,9 @@ function initForm(type) {
 					type: "POST",
 					dataType: 'JSON',
 					data: orderInfo,
+					beforeSend: function() {
+						$('#'+type+'Order').prop('disabled',true);
+					},
 					success: function(result) {
 						if (result.success){
 							jQuery.notify(result.msg, "success");
@@ -842,7 +866,7 @@ function initForm(type) {
 						}
 					},
 					complete: function() {
-						
+						$('#'+type+'Order').prop('disabled',false);
 					}
 				});
 			}
@@ -850,13 +874,13 @@ function initForm(type) {
 	});
 	
 	//SELECT 2 initialisieren
+
 	$("#"+type+"Form-salutation_id").select2();
 	$("#"+type+"Form-title_id").select2({allowClear:true});
 	$("#"+type+"Form-city_id").select2();
 	$("#"+type+"Form-from_ordertype_id").select2();
 	$("#"+type+"Form-to_ordertype_id").select2();
 	$("#"+type+"Form-salutation_id").select2();
-	$("#"+type+"Form-title_id").select2({allowClear:true});
 	$("#"+type+"Form-from_flight_id").select2();
 	$("#"+type+"Form-postorder_from_flight_id").select2();
 	$("#"+type+"Form-postorder").select2();
@@ -867,9 +891,11 @@ function initForm(type) {
 
 	//LERNENDES SYSTEM: Feld hinzufuegen/entfernen
 	$("#"+type+"Form-title_id").on("change", initOtherOption);
+	initOtherOptionHandler(type+"Form-title_id");
 	$("#"+type+"Form-from_flight_id").on("change", initOtherOption);
+	initOtherOptionHandler(type+"Form-from_flight_id");
 	$("#"+type+"Form-postorder_from_flight_id").on("change", initOtherOption);
-	$("#"+type+"Form-postorder_flight_number").on("change", initOtherOption);
+	initOtherOptionHandler(type+"Form-postorder_from_flight_id");
 	
 	if($('#'+type+'Form-district-array').length !== 0 && $('#'+type+'Form-street-array').length !== 0) {
 		var district_array = JSON.parse($('#'+type+'Form-district-array').val());
@@ -882,7 +908,8 @@ function initForm(type) {
 		$("#"+type+"Form-from_city_id").select2();
 
 		//LERNENDES SYSTEM: Feld hinzufuegen/entfernen
-		$("#"+type+"Form-from_city_id").on("change", initOtherOption);
+		//$("#"+type+"Form-from_city_id").on("change", initOtherOption);
+		initOtherOptionHandler(type+"Form-from_city_id");
 
 		if(type == 'add') {
 			$("#"+type+"Form-from_city_id").select2('val','',true);
@@ -908,10 +935,14 @@ function initForm(type) {
 			formatSelection: format,
 			formatResult: format
 		});
+		$("#"+type+"Form-postorder_flight_number").on("change", initOtherOption);
+		initOtherOptionHandler(type+"Form-postorder_flight_number");
 
 		//LERNENDES SYSTEM: Feld hinzufuegen/entfernen
-		$("#"+type+"Form-from_district_id").on("change", initOtherOption);
+		//$("#"+type+"Form-from_district_id").on("change", initOtherOption);
+		initOtherOptionHandler(type+"Form-from_district_id");
 		$("#"+type+"Form-flight_number").on("change", initOtherOption);
+		initOtherOptionHandler(type+"Form-flight_number");
 		
 		from_data_street[type] = street_array[$("#"+type+"Form-from_district_id").select2("val")];
 		$("#"+type+"Form-from_street_id").select2({
@@ -922,6 +953,7 @@ function initForm(type) {
 
 		//LERNENDES SYSTEM: Feld hinzufuegen/entfernen
 		$("#"+type+"Form-from_street_id").on("change", initOtherOption);
+		initOtherOptionHandler(type+"Form-from_street_id");
 		
 		$("#"+type+"Form-from_city_id").on("select2-selecting", function(e) 
 		{
@@ -952,7 +984,8 @@ function initForm(type) {
 		$("#"+type+"Form-to_city_id").select2();
 
 		//LERNENDES SYSTEM: Feld hinzufuegen/entfernen
-		$("#"+type+"Form-to_city_id").on("change", initOtherOption);
+		//$("#"+type+"Form-to_city_id").on("change", initOtherOption);
+		//initOtherOptionHandler(type+"Form-to_city_id");
 		if(type == 'add') {
 			$("#"+type+"Form-to_city_id").select2('val','',true);
 		}
@@ -965,7 +998,8 @@ function initForm(type) {
 		});
 
 		//LERNENDES SYSTEM: Feld hinzufuegen/entfernen
-		$("#"+type+"Form-to_district_id").on("change", initOtherOption);
+		//$("#"+type+"Form-to_district_id").on("change", initOtherOption);
+		//initOtherOptionHandler(type+"Form-to_district_id");
 		
 		to_data_street = street_array[$("#"+type+"Form-to_district_id").select2("val")];
 		$("#"+type+"Form-to_street_id").select2({
@@ -976,6 +1010,7 @@ function initForm(type) {
 
 		//LERNENDES SYSTEM: Feld hinzufuegen/entfernen
 		$("#"+type+"Form-to_street_id").on("change", initOtherOption);
+		initOtherOptionHandler(type+"Form-to_street_id");
 		
 		$("#"+type+"Form-to_city_id").on("select2-selecting", function(e) 
 		{
@@ -1247,7 +1282,8 @@ function initForm(type) {
 	
 	//Wenn EDIT dann soll der Preis angezeigt werden
 	if(type == 'edit' || type == 'copy') {
-		$('.'+type+'Form-pricedisplay').text(LANG_PRICE+' € '+jQuery.number(parseFloat($('#'+type+'Form-price').val()),2));
+		//$('.'+type+'Form-pricedisplay').text(LANG_PRICE+' € '+jQuery.number(parseFloat($('#'+type+'Form-price').val()),2));
+		displayPrice(parseFloat($('#'+type+'Form-price').val()),type);
 	}	
 	
 	$("#"+type+"OrderForm select").each(function(){
