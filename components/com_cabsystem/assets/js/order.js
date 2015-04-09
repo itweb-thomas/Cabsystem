@@ -411,17 +411,18 @@ function initOtherOption() {
 
 function initOtherOptionHandler(id) {
 	var select_element = $('#' + id);
-	console.log(select_element);
-	$($(select_element).data('select2').search).on('keyup', function(e) {
-		$(this).data('value',$(this).val());
-	});
-	$(select_element.data('select2').search).on('keydown', function(e) {
-		var keyCode = e.keyCode || e.which;
-		if (keyCode == 9) {
-			$(select_element).data('search-term',$(this).data('value'));
-			$(select_element).select2('val','other',true);
-		}
-	});
+	if($(select_element).length && $(select_element).data('select2').length > 0) {
+		$($(select_element).data('select2').search).on('keyup', function(e) {
+			$(this).data('value',$(this).val());
+		});
+		$(select_element.data('select2').search).on('keydown', function(e) {
+			var keyCode = e.keyCode || e.which;
+			if (keyCode == 9) {
+				$(select_element).data('search-term',$(this).data('value'));
+				$(select_element).select2('val','other',true);
+			}
+		});
+	}
 }
 
 function checkLockouts(type) {
@@ -1029,10 +1030,10 @@ function initForm(type) {
 	if(type == 'add') {
 		$("#"+type+"Form-from_ordertype_id").select2("val","");
 		$("#"+type+"Form-to_ordertype_id").select2("val","");
+		$("#"+type+"Form-from_flight_id").select2("val","");
 	}
 	
 	if(type == 'add' || type == 'copy') {
-		$("#"+type+"Form-from_flight_id").select2("val","");
 		$("#"+type+"Form-postorder_from_flight_id").select2("val","");
 		$("#"+type+"Form-postorder").select2("val","0");
 		//$("#"+type+"Form-to_flight_id").select2("val","");

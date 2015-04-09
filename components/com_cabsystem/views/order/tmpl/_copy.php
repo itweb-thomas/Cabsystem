@@ -139,7 +139,7 @@
                                 <label for="copyForm-from_flight_id" class="col-md-3 control-label">Aus</label>
                                 <div class="col-md-9">
                                     <select class="form-control" name="from_flight_id" id="copyForm-from_flight_id">
-                                      <?php
+                                        <?php
                                         echo '<option value="other">Andere</option>';
                                         foreach($this->destination_cities as $destination_city) {
                                             $selected = "";
@@ -147,9 +147,9 @@
                                             {
                                                 $selected = 'selected="selected"';
                                             }
-                                            echo '<option value="'.$destination_city->city_id.'" '.$selected.'>'.$destination_city->name.'</option>';	
+                                            echo '<option value="'.$destination_city->city_id.'" '.$selected.'>'.$destination_city->name.'</option>';
                                         }
-                                      ?>
+                                        ?>
                                     </select>
                                 </div>
                             </div>
@@ -267,7 +267,7 @@
                             <label for="copyForm-date" class="col-md-3 control-label">Datum</label>
                             <div class="col-md-9">
                                 <div class='input-group date' id='copyForm-date-picker' data-date-format="YYYY-MM-DD" data-min-date="<?php echo (JFactory::getUser()->authorise('cabsystem.admin', 'com_cabsystem')) ? 'false' : 'true';?>">
-                                    <input type='text' class="form-control" name="date" id="copyForm-date" readonly="readonly" value="<?php echo date("Y-m-d", strtotime($this->order->datetime)); ?>"/>
+                                    <input type='text' class="form-control" name="date" id="copyForm-date" readonly="readonly" value=""/>
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                                     </span>
                                 </div>
