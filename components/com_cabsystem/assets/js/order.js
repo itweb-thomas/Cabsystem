@@ -411,7 +411,7 @@ function initOtherOption() {
 
 function initOtherOptionHandler(id) {
 	var select_element = $('#' + id);
-	if($(select_element).length && $(select_element).data('select2').length > 0) {
+	if($(select_element).length && $(select_element).data('select2') != null) {
 		$($(select_element).data('select2').search).on('keyup', function(e) {
 			$(this).data('value',$(this).val());
 		});
@@ -956,26 +956,26 @@ function initForm(type) {
 		$("#"+type+"Form-from_street_id").on("change", initOtherOption);
 		initOtherOptionHandler(type+"Form-from_street_id");
 		
-		$("#"+type+"Form-from_city_id").on("select2-selecting", function(e) 
+		$("#"+type+"Form-from_city_id").on("change", function(e)
 		{
 			from_data_district[type] = district_array[e.val];
 			$("#"+type+"Form-from_district_id").select2("val","",true);
 			$("#"+type+"Form-from_street_id").select2("val","",true);
 		});
 		
-		$("#"+type+"Form-from_district_id").on("select2-selecting", function(e) 
+		$("#"+type+"Form-from_district_id").on("change", function(e)
 		{
 			from_data_street[type] = street_array[e.val];
 			$("#"+type+"Form-from_street_id").select2("val","",true);
 		});
 
-		$("#"+type+"Form-from_flight_id").on("select2-selecting", function(e)
+		$("#"+type+"Form-from_flight_id").on("change", function(e)
 		{
 			from_data_flightnumber[type] = flightnumber_array[e.val];
 			$("#"+type+"Form-flight_number").select2("val","",true);
 		});
 
-		$("#"+type+"Form-postorder_from_flight_id").on("select2-selecting", function(e)
+		$("#"+type+"Form-postorder_from_flight_id").on("change", function(e)
 		{
 			from_data_postorder_flightnumber[type] = flightnumber_array[e.val];
 			$("#"+type+"Form-postorder_flight_number").select2("val","",true);
@@ -1013,14 +1013,14 @@ function initForm(type) {
 		$("#"+type+"Form-to_street_id").on("change", initOtherOption);
 		initOtherOptionHandler(type+"Form-to_street_id");
 		
-		$("#"+type+"Form-to_city_id").on("select2-selecting", function(e) 
+		$("#"+type+"Form-to_city_id").on("change", function(e)
 		{
 			to_data_district = district_array[e.val];
 			$("#"+type+"Form-to_district_id").select2("val","",true);
 			$("#"+type+"Form-to_street_id").select2("val","",true);
 		});
 		
-		$("#"+type+"Form-to_district_id").on("select2-selecting", function(e) 
+		$("#"+type+"Form-to_district_id").on("change", function(e)
 		{
 			to_data_street = street_array[e.val];
 			$("#"+type+"Form-to_street_id").select2("val","",true);
