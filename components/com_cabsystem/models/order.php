@@ -899,30 +899,24 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 		switch($type) {
 			//Wenn eine Fahrt aufgegeben wurde
 			case 'new-order':
-				$subject = 'Cabsystem Testseite - Details zu Ihrer Fahrt';
+				$subject = 'Cabsystem Testseite - '.JText::_('COM_CABSYSTEM_EMAIL_ORDER_SUBJECT_CUSTOMER_DETAILS');
 				$body .= '<h1>'.$subject.'</h1>';
-				$body .= '<p>Sie haben soeben mit Ihrer Email-Adresse eine Fahrt bei Cabsystem Testseite gebucht. Bitte überprüfen Sie die folgenden Daten. Sollten Sie Änderungswünsche haben oder wurde die Fahrt nicht von Ihnen gebucht, kontaktieren Sie uns bitte telefonisch unter +43 (0) 664 246 6006.</p>';
+				$body .= '<p>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_CUSTOMER_DETAILS_TEXT_BEFORE').'</p>';
 			break;
 			//Wenn die Fahrt explizit storniert wurde
 			case 'order-canceled':
-				$subject = 'Cabsystem Testseite - Ihre Fahrt wurde storniert';
+				$subject = 'Cabsystem Testseite - '.JText::_('COM_CABSYSTEM_EMAIL_ORDER_SUBJECT_CUSTOMER_CANCELED');
 				$body .= '<h1>'.$subject.'</h1>';
-				$body .= '<p>Ihre Fahrt wurde soeben von einem Administrator storniert. Die Vereinbarung zur Abholung ist somit aufgehoben.</p>';
+				$body .= '<p>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_CUSTOMER_CANCELED_TEXT_BEFORE').'</p>';
 			break;
 			default:
 		}
 		
 		$body .= self::getOrderMailInfo($order);
 		
-		$body .= '<p>Wir bedanken uns dass Sie sich für Cabsystem Testseite entschieden haben. Für weitere Fragen und zukünftige Buchungen kontakieren Sie uns bitte<br/>
-		telefonisch: +43 (0) 664 246 6006<br/>
-		per Email: office@cabsystem-testseite.at<br/>
-		oder wie gewohnt über unser Online-Buchungssystem auf www.cabsystem-testseite.at.</p>';
+		$body .= '<p>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_CUSTOMER_TEXT_AFTER').'</p>';
 		
-		$body .= '<p>Mit freundlichen Grüßen<br/>
-		Cabsystem Testseite<br/>
-		Dragan Maric<br/>
-		Taxi und Mietwagenunternehmen</p>';
+		$body .= '<p>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_CUSTOMER_COMPANY_INFOS').'</p>';
 		
 		if(CabsystemHelpersView::sendMail($from_email_address, $from_email_name, $subject, $body, $to))
 		{
@@ -954,38 +948,49 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 		$body = '';
 		$to = $driver->email;
 		
+		//Betreff: Domain DATUM-UHRZEIT | VON_STRING => TO_STRING
+		$subject_details = '';
+		//DATUM/ZEIT
+		$subject_details .= date("d.m.Y", strtotime($order->datetime)).' '.date("H:i", strtotime($order->datetime));
+		$subject_details .= ' | ';
+		//VON NACH
+		$subject_details .= JText::_($order->from_ordertype_language_string);
+		$subject_details .= ' => ';
+		$subject_details .= JText::_($order->to_ordertype_language_string);
+		
 		$confirm = false;
 		
 		switch($type) {
 			//Wenn eine Fahrt zugewiesen wurde
 			case 'new-order':
-				$subject = 'Cabsystem Testseite - Neue Fahrt';
+				$subject = 'Neue Fahrt';
 				$body .= '<h1>'.$subject.'</h1>';
+				$subject = $subject_details.': '.$subject;
 				$body .= '<p>Es wurde Ihnen soeben folgende Fahrt zugewiesen. Bitte begeben Sie sich zum angegebenen Zeitpunkt zum Kunden.</p>';
 				$confirm = true;
 			break;
 			//Wenn die Fahrt einem anderen Fahrer zugewiesen wurde
 			case 'now-other-driver':
-				$subject = 'Cabsystem Testseite - Eine Fahrt wurde einem anderen Fahrer zugewiesen';
+				$subject = 'Fahrt anderem Fahrer zugewiesen';
 				$body .= '<h1>'.$subject.'</h1>';
 				$body .= '<p>Folgende Fahrt wurde einem anderen Fahrer zugewiesen. Sie sind für diese Fahrt ab jetzt nicht mehr zuständig.</p>';
 			break;
 			//Wenn die Fahrt dem gleichen Fahrer nochmal zugewiesen wurde
 			case 'same-order-again':
-				$subject = 'Cabsystem Testseite - Eine Fahrt wurde Ihnen neu zugewiesen';
+				$subject = 'Fahrt neu zugewiesen';
 				$body .= '<h1>'.$subject.'</h1>';
 				$body .= '<p>Es wurde Ihnen soeben folgende bereits zugewiesene Fahrt nochmals zugewiesen. Dies kann aufgrund einer Änderung durchgeführt worden sein. Beachten Sie somit bitte ausschließlich den neuen Auftrag und bestätigen Sie ihn nochmals.</p>';
 				$confirm = true;
 			break;
 			//Wenn die Fahrt jetzt keinem Fahrer mehr zugewiesen ist
 			case 'now-no-driver':
-				$subject = 'Cabsystem Testseite - Eine Fahrt wurde zurückgezogen';
+				$subject = 'Fahrt zurückgezogen';
 				$body .= '<h1>'.$subject.'</h1>';
 				$body .= '<p>Folgende Fahrt wurde soeben zurückgezogen. Es ist somit kein Fahrer mehr zugewiesen und Sie sind für diese Fahrt ab jetzt nicht mehr zuständig.</p>';
 			break;
 			//Wenn die Fahrt explizit storniert wurde
 			case 'order-canceled':
-				$subject = 'Cabsystem Testseite - Eine Fahrt wurde storniert';
+				$subject = 'Fahrt storniert';
 				$body .= '<h1>'.$subject.'</h1>';
 				$body .= '<p>Folgende Fahrt wurde soeben storniert. Sie sind weiterhin als Fahrer zugewiesen, sollen die Fahrt jedoch nicht antreten.</p>';
 			break;
@@ -1010,19 +1015,19 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 
 	public function getOrderMailInfo($order) {
 		$result = '';
-		$result .= '<h2>Informationen zur Fahrt</h2>';
+		$result .= '<h2>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_HEADLINE_ORDER_DETAILS').'</h2>';
 		$result .= '<table border="1" style="border:1px solid #000000" cellspacing="0" cellpadding="10">';
 		$result .= '<tr>';
 		//BESTELLNUMMER
-		$result .= '<td width="30%" style="width:30%;"><strong>Bestellnummer:</strong></td><td width="70%" style="width:70%;">'.$order->order_id.'</td>';
+		$result .= '<td width="30%" style="width:30%;"><strong>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_ORDER_ID').':</strong></td><td width="70%" style="width:70%;">'.$order->order_id.'</td>';
 		$result .= '</tr>';
 		//DATUM/ZEIT
 		$result .= '<tr>';
-		$result .= '<td><strong>Wann:</strong></td><td>'.date("d.m.Y", strtotime($order->datetime)).' | '.date("H:i", strtotime($order->datetime)).'</td>';
+		$result .= '<td><strong>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_DATETIME_FROM').':</strong></td><td>'.date("d.m.Y", strtotime($order->datetime)).' | '.date("H:i", strtotime($order->datetime)).'</td>';
 		$result .= '</tr>';
 		//VON
 		$result .= '<tr>';
-		$result .= '<td><strong>Von:</strong></td><td>'.JText::_($order->from_ordertype_language_string).' | ';
+		$result .= '<td><strong>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_FROM').':</strong></td><td>'.JText::_($order->from_ordertype_language_string).' | ';
 		if ($order->from_ordertype_type != 'airport') {
 			$result .= $order->from_street_name.' ';
 			$result .= !empty($order->from_house) ? $order->from_house : ''; 
@@ -1038,7 +1043,7 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 		$result .= '</tr>';
 		//NACH
 		$result .= '<tr>';
-		$result .= '<td><strong>Nach:</strong></td><td>'.JText::_($order->to_ordertype_language_string);
+		$result .= '<td><strong>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_TO').':</strong></td><td>'.JText::_($order->to_ordertype_language_string);
 		if ($order->to_ordertype_type != 'airport') {
 			$result .= ' | ';
 			$result .= $order->to_street_name.' ';
@@ -1056,12 +1061,12 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 		$result .= '</tr>';
 		//ZUSATZADRESSEN
 		$result .= '<tr>';
-		$result .= '<td><strong>Zusatzadressen:</strong></td><td>';
+		$result .= '<td><strong>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_ADDITIONALADDRESSES').':</strong></td><td>';
 		if(!empty($order->additionaladdresses_name)) {
 			$result .= $order->additionaladdresses_name;
 		}
 		else {
-			$result .= 'keine';
+			$result .= JText::_('COM_CABSYSTEM_NONE');
 		}
 		if(!empty($order->additional_address_districts)) {
 			$result .= '<br/>';
@@ -1086,7 +1091,7 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 		$result .= '</tr>';
 		//KUNDE
 		$result .= '<tr>';
-		$result .= '<td><strong>Kunde:</strong></td><td>';
+		$result .= '<td><strong>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_CUSTOMER').':</strong></td><td>';
 		$result .= !empty($order->salutation_name) ? $order->salutation_name : ''; 
 		$result .= !empty($order->title_name) ? ' '.$order->title_name : ''; 
 		$result .= ' '.$order->name;
@@ -1099,70 +1104,70 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 		//ANMERKUNG
 		if(!empty($order->comment))  {
 			$result .= '<tr>';
-			$result .= '<td><strong>Anmerkung:</strong></td><td>'.$order->comment.'</td>';
+			$result .= '<td><strong>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_COMMENT').':</strong></td><td>'.$order->comment.'</td>';
 			$result .= '</tr>';
 		}
 		//AUTOTYP
 		$result .= '<tr>';
-		$result .= '<td><strong>Autotyp:</strong></td><td>';
+		$result .= '<td><strong>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_CARTYPE').':</strong></td><td>';
 		$result .= $order->cartype_name;
 		$result .= '</td>';
 		$result .= '</tr>';
 		//PERSONEN
 		$result .= '<tr>';
-		$result .= '<td><strong>Personen:</strong></td><td>';
-		$result .= !empty($order->persons) ? $order->persons.' Personen' : 'keine Angaben'; 
+		$result .= '<td><strong>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_PERSONS').':</strong></td><td>';
+		$result .= !empty($order->persons) ? $order->persons.' '.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_PERSONS_VALUE') : JText::_('COM_CABSYSTEM_NO_DATA');
 		$result .= '</td>';
 		$result .= '</tr>';
 		//KOFFER
 		$result .= '<tr>';
-		$result .= '<td><strong>Koffer:</strong></td><td>';
-		$result .= !empty($order->luggage) ? $order->luggage.' Koffer' : 'keine Angaben'; 
+		$result .= '<td><strong>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_LUGGAGE').':</strong></td><td>';
+		$result .= !empty($order->luggage) ? $order->luggage.' '.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_LUGGAGE_VALUE') : JText::_('COM_CABSYSTEM_NO_DATA');
 		$result .= '</td>';
 		$result .= '</tr>';
 		//HANDGEPAECK
 		$result .= '<tr>';
-		$result .= '<td><strong>Handgepäck:</strong></td><td>';
-		$result .= !empty($order->handluggage) ? $order->handluggage.' Handgepäckstücke' : 'keine Angaben'; 
+		$result .= '<td><strong>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_HANDLUGGAGE').':</strong></td><td>';
+		$result .= !empty($order->handluggage) ? $order->handluggage.' '.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_HANDLUGGAGE_VALUE') : JText::_('COM_CABSYSTEM_NO_DATA');
 		$result .= '</td>';
 		$result .= '</tr>';
 		//KINDERSITZ
 		$result .= '<tr>';
-		$result .= '<td><strong>Kindersitz:</strong></td><td>';
-		$result .= !empty($order->child_seat) ? $order->child_seat.' Kindersitze' : 'keine Angaben'; 
+		$result .= '<td><strong>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_CHILD_SEAT').':</strong></td><td>';
+		$result .= !empty($order->child_seat) ? $order->child_seat.' '.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_CHILD_SEAT_VALUE') : JText::_('COM_CABSYSTEM_NO_DATA');
 		$result .= '</td>';
 		$result .= '</tr>';
 		//MAXI COSI
 		$result .= '<tr>';
-		$result .= '<td><strong>Maxi Cosi:</strong></td><td>';
-		$result .= !empty($order->maxi_cosi) ? $order->maxi_cosi.' Maxi Cosis' : 'keine Angaben'; 
+		$result .= '<td><strong>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_MAXI_COSI').':</strong></td><td>';
+		$result .= !empty($order->maxi_cosi) ? $order->maxi_cosi.' '.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_MAXI_COSI_VALUE') : JText::_('COM_CABSYSTEM_NO_DATA');
 		$result .= '</td>';
 		$result .= '</tr>';
 		//KINDERSITZERHOEHUNG
 		$result .= '<tr>';
-		$result .= '<td><strong>Kindersitzerhöhung:</strong></td><td>';
-		$result .= !empty($order->child_seat_elevation) ? $order->child_seat_elevation.' Kindersitzerhöhungen' : 'keine Angaben'; 
+		$result .= '<td><strong>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_CHILD_SEAT_ELEVATION').':</strong></td><td>';
+		$result .= !empty($order->child_seat_elevation) ? $order->child_seat_elevation.' '.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_CHILD_SEAT_ELEVATION') : JText::_('COM_CABSYSTEM_NO_DATA');
 		$result .= '</td>';
 		$result .= '</tr>';
 		//RUECKFAHRT
 		$result .= '<tr>';
-		$result .= '<td><strong>Rückfahrt:</strong></td><td>';
+		$result .= '<td><strong>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_POSTORDER').':</strong></td><td>';
 		//Wenn das eine Rueckfahrt ist
 		if(!empty($order->preorder_id)) {
-			$result .= 'Das ist die Rückfahrt von Bestellung Nr. '.$order->preorder_id;
+			$result .= JText::sprintf('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_POSTORDER_YES',$order->preorder_id);
 		}
 		else {
-			$result .= 'Wenn eine Rückfahrt gebucht wurde, erhalten Sie dafür eine separate Email';
+			$result .= JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_POSTORDER_NO');
 			
 		}
 		$result .= '</td>';
 		$result .= '</tr>';
 		//PREIS
 		$result .= '<tr>';
-		$result .= '<td><strong>Preis:</strong></td><td>';
+		$result .= '<td><strong>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_PRICE').':</strong></td><td>';
 		$result .= '€ '.$order->price;
-		$result .= !empty($order->paymentmethod_name) ? ' (Zahlungsart: '.$order->paymentmethod_name.')' : ''; 
-		$result .= ($order->price_override) ? ' <strong>Spezialpreis</strong>' : ''; 
+		$result .= !empty($order->paymentmethod_name) ? ' ('.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_PAYMENTMETHOD').': '.$order->paymentmethod_name.')' : '';
+		$result .= ($order->price_override) ? ' <strong>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_SPECIAL_PRICE').'</strong>' : '';
 		$result .= '</td>';
 		$result .= '</tr>';
 		$result .= '</table>';

@@ -17,14 +17,6 @@ var act_price = 0;
 var night_price = 0;
 var lockouts_array = new Array();
 
-var INVALID_SAME_TYPE = 'Eine Fahrt von dieser Adresse zur gleichen ist nicht zulässig!';
-var INVALID_NO_AIRPORT = 'Der Flughafen muss entweder als Abfahrtspunkt oder Ziel angegeben werden.';
-var INVALID_A_TO_B = 'Fahrten von A nach B sind nicht möglich. Bitte wählen Sie den Flughafen als Ziel oder Abholort aus.';
-
-var LANG_PRICE = "Preis: ";
-var LANG_PRICE_WILL_BE_CALCULATED = "wird berechnet";
-var LANG_PRICE_ON_REQUEST = "auf Anfrage";
-
 var all_districts_array;
 var date_search_flag = "asc";
 
@@ -279,11 +271,11 @@ function displayPrice(price,type) {
 	}
 	
 	if(act_price < 0) {
-		$('.'+type+'Form-pricedisplay').text(LANG_PRICE+LANG_PRICE_ON_REQUEST);
+		$('.'+type+'Form-pricedisplay').text(lang['COM_CABSYSTEM_PRICE']+': '+lang['COM_CABSYSTEM_LANG_PRICE_ON_REQUEST']);
 		$('#'+type+'Form-price').val('NULL');
 	}
 	else {
-		$('.'+type+'Form-pricedisplay').text(LANG_PRICE+' € '+jQuery.number(parseFloat(act_price+night_price),2)+POSTORDER_PRICE_TEXT);
+		$('.'+type+'Form-pricedisplay').text(lang['COM_CABSYSTEM_PRICE']+': '+' € '+jQuery.number(parseFloat(act_price+night_price),2)+POSTORDER_PRICE_TEXT);
 		$('#'+type+'Form-price').val(jQuery.number((parseFloat(act_price+night_price)),2));
 	}
 }
@@ -386,7 +378,7 @@ function initOtherOption() {
 				$('#' + $(this).attr('id') + '-other').rules("add", {
 					required: true,
 					messages: {
-						required: "Bitte füllen Sie dieses Feld aus"
+						required: lang['COM_CABSYSTEM_ERROR_REQUIRED_GENERAL']
 					}
 				});
 			}
@@ -474,7 +466,7 @@ function initForm(type) {
 
 	jQuery.validator.addMethod("lockout", function(value, element) {
 		return checkLockouts(type);
-	}, "Eine Buchung zu diesem Zeitpunkt an diesem Tag ist aufgrund der aktuellen Auslastung leider nicht möglich.");
+	}, lang['COM_CABSYSTEM_ERROR_LOCKOUT']);
 	
 	//Form Validation hinzufuegen
 	$("#"+type+"OrderForm").validate({
@@ -546,33 +538,33 @@ function initForm(type) {
 			}
 		},
 		messages: {
-			salutation_id: "Bitte geben Sie eine Anrede an",
-			name: "Bitte geben Sie den Namen an",
-			phone: "Bitte geben Sie die Telefonnummer an",
+			salutation_id: lang['COM_CABSYSTEM_ERROR_REQUIRED_SALUTATION_ID'],
+			name: lang['COM_CABSYSTEM_ERROR_REQUIRED_NAME'],
+			phone: lang['COM_CABSYSTEM_ERROR_REQUIRED_PHONE'],
 			/*email: {
-				required: "Bitte geben Sie die Email Adresse an",
-				email: "Die Email Adresse muss die Form name@domain.com haben"
+				required: lang['COM_CABSYSTEM_ERROR_REQUIRED_EMAIL'],
+				email: lang['COM_CABSYSTEM_ERROR_EMAIL_EMAIL']
 			},*/
-			from_city_id: "Bitte geben Sie den Startort an",
-			from_district_id: "Bitte geben Sie den Startbezirk an",
-			from_street_id: "Bitte geben Sie die Startadresse an",
-			from_ordertype_id: "Bitte geben Sie den Abholort ein",
-			to_ordertype_id: "Bitte geben Sie ein Ziel ein",
-			to_city_id: "Bitte geben Sie den Zielort an",
-			to_district_id: "Bitte geben Sie den Zielbezirk an",
-			to_street_id: "Bitte geben Sie die Zieladresse an",
-			from_flight_id: "Bitte geben Sie das Land an aus dem Ihr Flug kommt",
-			//to_flight_id: "Bitte geben Sie die Flugnummer an",
-			postorder_from_flight_id: "Bitte geben Sie das Land an aus dem Ihr Flug kommt",
-			postorder_flight_number: "Bitte geben Sie die Flugnummer für die Rückfahrt ein",
-			date: "Bitte geben Sie ein Datum ein",
+			from_city_id: lang['COM_CABSYSTEM_ERROR_REQUIRED_FROM_CITY_ID'],
+			from_district_id: lang['COM_CABSYSTEM_ERROR_REQUIRED_FROM_DISTRICT_ID'],
+			from_street_id: lang['COM_CABSYSTEM_ERROR_REQUIRED_FROM_STREET_ID'],
+			from_ordertype_id: lang['COM_CABSYSTEM_ERROR_REQUIRED_FROM_ORDERTYPE_ID'],
+			to_ordertype_id: lang['COM_CABSYSTEM_ERROR_REQUIRED_TO_ORDERTYPE_ID'],
+			to_city_id: lang['COM_CABSYSTEM_ERROR_REQUIRED_TO_CITY_ID'],
+			to_district_id: lang['COM_CABSYSTEM_ERROR_REQUIRED_TO_DISTRICT_ID'],
+			to_street_id: lang['COM_CABSYSTEM_ERROR_REQUIRED_TO_STREET_ID'],
+			from_flight_id: lang['COM_CABSYSTEM_ERROR_REQUIRED_FROM_FLIGHT_ID'],
+			//to_flight_id: lang['COM_CABSYSTEM_ERROR_REQUIRED_TO_FLIGHT_ID'],
+			postorder_from_flight_id: lang['COM_CABSYSTEM_ERROR_REQUIRED_POSTORDER_FROM_FLIGHT_ID'],
+			postorder_flight_number: lang['COM_CABSYSTEM_ERROR_REQUIRED_POSTORDER_FLIGHT_NUMBER'],
+			date: lang['COM_CABSYSTEM_ERROR_REQUIRED_DATE'],
 			time: {
-				required: "Bitte geben Sie eine Zeit ein",
-				lockout: "Eine Buchung zu diesem Zeitpunkt ist aufgrund der aktuellen Auslastung leider nicht möglich."
+				required: lang['COM_CABSYSTEM_ERROR_REQUIRED_TIME'],
+				lockout: lang['COM_CABSYSTEM_ERROR_LOCKOUT_TIME']
 			},
-			postorder_date: "Bitte geben Sie ein Datum für die Rückfahrt ein",
-			postorder_time: "Bitte geben Sie eine Zeit für die Rückfahrt ein",
-			tos_accepted: "Bitte akzeptieren Sie die AGBs"
+			postorder_date: lang['COM_CABSYSTEM_ERROR_REQUIRED_POSTORDER_DATE'],
+			postorder_time: lang['COM_CABSYSTEM_ERROR_REQUIRED_POSTORDER_TIME'],
+			tos_accepted: lang['COM_CABSYSTEM_ERROR_REQUIRED_TOS_ACCEPTED']
 		}
 	});
 	
@@ -656,8 +648,8 @@ function initForm(type) {
 			required: true,
 			email: true,
 			messages: {
-				required: "Bitte geben Sie die Email Adresse an",
-				email: "Die Email Adresse muss die Form name@domain.com haben"
+				required: lang['COM_CABSYSTEM_ERROR_REQUIRED_EMAIL'],
+				email: lang['COM_CABSYSTEM_ERROR_EMAIL_EMAIL']
 			}
 		});
 	}
@@ -673,7 +665,7 @@ function initForm(type) {
 			//ROUTE
 			//von A nach B voruebergehend ausschließen
 			if(analyseType($('#'+type+'Form-to_ordertype_id').find(":selected").data("type")) == analyseType($('#'+type+'Form-from_ordertype_id').find(":selected").data("type")) && analyseType($('#'+type+'Form-to_ordertype_id').find(":selected").data("type")) == 'address') {
-				alert(INVALID_A_TO_B);
+				alert(lang['COM_CABSYSTEM_INVALID_A_TO_B']);
 				valid = false;
 			}
 			
@@ -1058,7 +1050,7 @@ function initForm(type) {
 	//FROM ueberpruefen ob nicht VON/NACH Flughafen/BahnhofS/BahnhofN gewaehlt wurde
 	$('#'+type+'Form-from_ordertype_id').on('select2-selecting',function(e) {
 		if(e.val == $("#"+type+"Form-to_ordertype_id").select2('val') && $("#"+type+"Form-to_ordertype_id").find(":selected").data("type") == 'airport') {
-			alert(INVALID_SAME_TYPE);
+			alert(lang['COM_CABSYSTEM_INVALID_SAME_TYPE']);
 			e.preventDefault();
 		}
 	});
@@ -1066,7 +1058,7 @@ function initForm(type) {
 	//FROM ueberpruefen ob nicht VON/NACH Flughafen/BahnhofS/BahnhofN gewaehlt wurde
 	$('#'+type+'Form-to_ordertype_id').on('select2-selecting',function(e) {
 		if(e.val == $("#"+type+"Form-from_ordertype_id").select2('val') && $("#"+type+"Form-from_ordertype_id").find(":selected").data("type") == 'airport') {
-			alert(INVALID_SAME_TYPE);
+			alert(lang['COM_CABSYSTEM_INVALID_SAME_TYPE']);
 			e.preventDefault();
 		}
 	});
@@ -1146,17 +1138,20 @@ function initForm(type) {
 		//Wenn eingetragene Koffer zu viele
 		if($("#"+type+"Form-cartype_id").find(":selected").data('luggage') != "" && $("#"+type+"Form-luggage").val() > $("#"+type+"Form-cartype_id").find(":selected").data('luggage')) {
 			$("#"+type+"Form-luggage").val($("#"+type+"Form-cartype_id").find(":selected").data('luggage'));
-			alert("In diesem Fahrzeugtyp können nur "+$("#"+type+"Form-cartype_id").find(":selected").data('luggage')+" Koffer mitgenommen werden, die Anzahl der Koffer wurde reduziert. Wenn Sie mehr mitnehmen möchten, wählen Sie bitte den nächst größeren Fahrzeugtyp.");
+			alert(lang['COM_CABSYSTEM_ERROR_LUGGAGE1']+$("#"+type+"Form-cartype_id").find(":selected").data('luggage')+lang['COM_CABSYSTEM_ERROR_LUGGAGE2'])
+			//alert("In diesem Fahrzeugtyp können nur "+$("#"+type+"Form-cartype_id").find(":selected").data('luggage')+" Koffer mitgenommen werden, die Anzahl der Koffer wurde reduziert. Wenn Sie mehr mitnehmen möchten, wählen Sie bitte den nächst größeren Fahrzeugtyp.");
 		}
 		//Wenn eingetragene Hangepaecksstuecke zu viele
 		if($("#"+type+"Form-cartype_id").find(":selected").data('handluggage') != "" && $("#"+type+"Form-handluggage").val() > $("#"+type+"Form-cartype_id").find(":selected").data('handluggage')) {
 			$("#"+type+"Form-handluggage").val($("#"+type+"Form-cartype_id").find(":selected").data('handluggage'));
-			alert("In diesem Fahrzeugtyp können nur "+$("#"+type+"Form-cartype_id").find(":selected").data('handluggage')+" Handgepäckstücke mitgenommen werden, die Anzahl der Handgepäckstücke wurde reduziert. Wenn Sie mehr mitnehmen möchten, wählen Sie bitte den nächst größeren Fahrzeugtyp.");
+			alert(lang['COM_CABSYSTEM_ERROR_HANDLUGGAGE1']+$("#"+type+"Form-cartype_id").find(":selected").data('handluggage')+lang['COM_CABSYSTEM_ERROR_HANDLUGGAGE2'])
+			//alert("In diesem Fahrzeugtyp können nur "+$("#"+type+"Form-cartype_id").find(":selected").data('handluggage')+" Handgepäckstücke mitgenommen werden, die Anzahl der Handgepäckstücke wurde reduziert. Wenn Sie mehr mitnehmen möchten, wählen Sie bitte den nächst größeren Fahrzeugtyp.");
 		}
 		//Wenn eingetragene Personen zu viele
 		if($("#"+type+"Form-cartype_id").find(":selected").data('persons') != "" && $("#"+type+"Form-persons").val() > $("#"+type+"Form-cartype_id").find(":selected").data('persons')) {
 			$("#"+type+"Form-persons").val($("#"+type+"Form-cartype_id").find(":selected").data('persons'));
-			alert("In diesem Fahrzeugtyp können nur "+$("#"+type+"Form-cartype_id").find(":selected").data('persons')+" Personen mitgenommen werden, die Anzahl der Personen wurde reduziert. Wenn Sie mehr auswählen möchten, wählen Sie bitte den nächst größeren Fahrzeugtyp.");
+			alert(lang['COM_CABSYSTEM_ERROR_PERSONS1']+$("#"+type+"Form-cartype_id").find(":selected").data('persons')+lang['COM_CABSYSTEM_ERROR_PERSONS2'])
+			//alert("In diesem Fahrzeugtyp können nur "+$("#"+type+"Form-cartype_id").find(":selected").data('persons')+" Personen mitgenommen werden, die Anzahl der Personen wurde reduziert. Wenn Sie mehr auswählen möchten, wählen Sie bitte den nächst größeren Fahrzeugtyp.");
 		}
 		
 	});
@@ -1165,7 +1160,8 @@ function initForm(type) {
 		//Wenn eingetragene Koffer zu viele
 		if($("#"+type+"Form-cartype_id").find(":selected").data('persons') != "" && $("#"+type+"Form-persons").val() > $("#"+type+"Form-cartype_id").find(":selected").data('persons')) {
 			$("#"+type+"Form-persons").val($("#"+type+"Form-cartype_id").find(":selected").data('persons'));
-			alert("In diesem Fahrzeugtyp können nur "+$("#"+type+"Form-cartype_id").find(":selected").data('persons')+" Personen mitgenommen werden. Wenn Sie mehr auswählen möchten, wählen Sie bitte den nächst größeren Fahrzeugtyp.");
+			alert(lang['COM_CABSYSTEM_ERROR_PERSONS1']+$("#"+type+"Form-cartype_id").find(":selected").data('persons')+lang['COM_CABSYSTEM_ERROR_PERSONS2'])
+			//alert("In diesem Fahrzeugtyp können nur "+$("#"+type+"Form-cartype_id").find(":selected").data('persons')+" Personen mitgenommen werden. Wenn Sie mehr auswählen möchten, wählen Sie bitte den nächst größeren Fahrzeugtyp.");
 		}
 	});
 	
@@ -1174,7 +1170,8 @@ function initForm(type) {
 		//Wenn eingetragene Koffer zu viele
 		if($("#"+type+"Form-cartype_id").find(":selected").data('luggage') != "" && $("#"+type+"Form-luggage").val() > $("#"+type+"Form-cartype_id").find(":selected").data('luggage')) {
 			$("#"+type+"Form-luggage").val($("#"+type+"Form-cartype_id").find(":selected").data('luggage'));
-			alert("In diesem Fahrzeugtyp können nur "+$("#"+type+"Form-cartype_id").find(":selected").data('luggage')+" Koffer mitgenommen werden. Wenn Sie mehr mitnehmen möchten, wählen Sie bitte den nächst größeren Fahrzeugtyp.");
+			alert(lang['COM_CABSYSTEM_ERROR_LUGGAGE1']+$("#"+type+"Form-cartype_id").find(":selected").data('luggage')+lang['COM_CABSYSTEM_ERROR_LUGGAGE2'])
+			//alert("In diesem Fahrzeugtyp können nur "+$("#"+type+"Form-cartype_id").find(":selected").data('luggage')+" Koffer mitgenommen werden. Wenn Sie mehr mitnehmen möchten, wählen Sie bitte den nächst größeren Fahrzeugtyp.");
 		}
 	});
 	
@@ -1183,7 +1180,8 @@ function initForm(type) {
 		//Wenn eingetragene Hangepaecksstuecke zu viele
 		if($("#"+type+"Form-cartype_id").find(":selected").data('handluggage') != "" && $("#"+type+"Form-handluggage").val() > $("#"+type+"Form-cartype_id").find(":selected").data('handluggage')) {
 			$("#"+type+"Form-handluggage").val($("#"+type+"Form-cartype_id").find(":selected").data('handluggage'));
-			alert("In diesem Fahrzeugtyp können nur "+$("#"+type+"Form-cartype_id").find(":selected").data('handluggage')+" Handgepäckstücke mitgenommen werden. Wenn Sie mehr mitnehmen möchten, wählen Sie bitte den nächst größeren Fahrzeugtyp.");
+			alert(lang['COM_CABSYSTEM_ERROR_HANDLUGGAGE1']+$("#"+type+"Form-cartype_id").find(":selected").data('handluggage')+lang['COM_CABSYSTEM_ERROR_HANDLUGGAGE2'])
+			//alert("In diesem Fahrzeugtyp können nur "+$("#"+type+"Form-cartype_id").find(":selected").data('handluggage')+" Handgepäckstücke mitgenommen werden. Wenn Sie mehr mitnehmen möchten, wählen Sie bitte den nächst größeren Fahrzeugtyp.");
 		}
 	});
 	
@@ -1211,7 +1209,7 @@ function initForm(type) {
 				$("#"+type+"Form-additionaladdresses_district_"+i).rules( "add", {
 					required: true,
 					messages: {
-						required: "Bitte geben Sie einen Bezirk für die Zusatzadresse an"
+						required: lang['COM_CABSYSTEM_ERROR_REQUIRED_ADDITIONALADDRESSES_DISTRICT']
 					}
 				});
 
@@ -1246,7 +1244,7 @@ function initForm(type) {
 			$(this).rules("add", {
 				required: true,
 				messages: {
-					required: "Bitte geben Sie einen Bezirk für die Zusatzadresse an"
+					required: lang['COM_CABSYSTEM_ERROR_REQUIRED_ADDITIONALADDRESSES_DISTRICT']
 				}
 			});
 			//Event Listener
@@ -1283,7 +1281,7 @@ function initForm(type) {
 	
 	//Wenn EDIT dann soll der Preis angezeigt werden
 	if(type == 'edit' || type == 'copy') {
-		//$('.'+type+'Form-pricedisplay').text(LANG_PRICE+' € '+jQuery.number(parseFloat($('#'+type+'Form-price').val()),2));
+		//$('.'+type+'Form-pricedisplay').text(lang['COM_CABSYSTEM_PRICE']+': '+' € '+jQuery.number(parseFloat($('#'+type+'Form-price').val()),2));
 		displayPrice(parseFloat($('#'+type+'Form-price').val()),type);
 	}	
 	
