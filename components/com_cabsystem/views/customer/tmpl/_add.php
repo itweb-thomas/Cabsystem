@@ -46,7 +46,7 @@
                             <select class="form-control" name="salutation_id" id="addForm-salutation_id">
                               <?php
                                 foreach($this->salutations as $salutation) {
-                                    echo '<option value="'.$salutation->salutation_id.'">'.$salutation->name.'</option>';	
+                                    echo '<option value="'.$salutation->salutation_id.'">'.JText::_($salutation->language_string).'</option>';
                                 }
                               ?>
                             </select>

@@ -31,7 +31,7 @@
 									{
 										$selected = 'selected="selected"';
 									}
-                                    echo '<option value="'.$salutation->salutation_id.'" '.$selected.'>'.$salutation->name.'</option>';	
+                                    echo '<option value="'.$salutation->salutation_id.'" '.$selected.'>'.JText::_($salutation->language_string).'</option>';
                                 }
                               ?>
                             </select>

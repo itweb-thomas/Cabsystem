@@ -1,7 +1,7 @@
 <tr class="listRow" data-customer_id="<?php echo $this->customer->customer_id; ?>">
 	<td>
 	<?php 
-	echo !empty($this->customer->salutation_name) ? $this->customer->salutation_name : ''; 
+	echo !empty($this->customer->salutation_language_string) ? JText::_($this->customer->salutation_language_string) : '';
 	echo !empty($this->customer->title_name) ? ' '.$this->customer->title_name : ''; 
 	?>
     </td>

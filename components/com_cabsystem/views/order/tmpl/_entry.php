@@ -240,7 +240,7 @@
 	<td>
 	<?php 
 	echo '<strong>';
-	echo !empty($this->order->salutation_name) ? $this->order->salutation_name : ''; 
+	echo !empty($this->order->salutation_language_string) ? JText::_($this->order->salutation_language_string) : '';
 	echo !empty($this->order->title_name) ? ' '.$this->order->title_name : ''; 
 	echo ' '.$this->order->name.'</strong>';
 	echo '<br/>';
@@ -278,7 +278,7 @@
     <td>
 	<?php 
 	echo '€ '.$this->order->price;
-	echo !empty($this->order->paymentmethod_name) ? '<br/>'.$this->order->paymentmethod_name : ''; 
+	echo !empty($this->order->paymentmethod_language_string) ? '<br/>'.JText::_($this->order->paymentmethod_language_string) : '';
 	echo ($this->order->price_override) ? '<br/>Spezialpreis' : ''; 
 	?>
     </td>

@@ -20,7 +20,7 @@ class CabsystemModelsSalutation extends CabsystemModelsDefault
 
 	var $_salutation_id = null;
 
-	var $_name = null;
+	var $_language_string = null;
 
 	var $_created = null;
 
@@ -97,16 +97,6 @@ class CabsystemModelsSalutation extends CabsystemModelsDefault
 		{
 
 		  $query->where('s.salutation_id = ' . (int) $this->_salutation_id);
-
-		}
-
-		
-
-		if($this->_name) 
-
-		{
-
-		  $query->where('s.name = ' . (int) $this->_name);
 
 		}
 

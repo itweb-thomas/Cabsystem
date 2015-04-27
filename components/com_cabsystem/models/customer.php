@@ -35,7 +35,7 @@ class CabsystemModelsCustomer extends CabsystemModelsDefault
 
 	var $_salutation_id = null;
 	
-	var $_salutation_name = null;
+	var $_salutation_language_string = null;
 
 	var $_title_id = null;
 	
@@ -112,16 +112,16 @@ class CabsystemModelsCustomer extends CabsystemModelsDefault
 			$db = JFactory::getDBO();
 			$query = $db->getQuery(TRUE);
 			
-			$query->select('a.name AS salutation_name');
+			$query->select('a.name AS salutation_language_string');
 	
 			$query->from('#__cabsystem_customer_salutations as a');
 			$query->where('a.salutation_id = ' . (int) $row->salutation_id);
 			
 			$db->setQuery($query);
 			$item = $db->loadObject();
-			if(!empty($item->salutation_name)) 
+			if(!empty($item->salutation_language_string))
 			{
-				$row->salutation_name = $item->salutation_name;
+				$row->salutation_language_string = $item->salutation_language_string;
 			}
 		}
 		
@@ -154,7 +154,7 @@ class CabsystemModelsCustomer extends CabsystemModelsDefault
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(TRUE);
 		
-		$query->select('c.*,s.name AS street_name,a.name AS salutation_name,t.name AS title_name,d.district_id,d.district AS district_name,d.zip AS district_zip,i.city_id,i.name AS city_name');
+		$query->select('c.*,s.name AS street_name,a.name AS salutation_language_string,t.name AS title_name,d.district_id,d.district AS district_name,d.zip AS district_zip,i.city_id,i.name AS city_name');
 
 		$query->from('#__cabsystem_customers as c');
 		$query->leftjoin('#__cabsystem_streets as s on s.street_id = c.street_id');

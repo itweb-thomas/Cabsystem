@@ -302,7 +302,7 @@
                                             $selected = 'selected="selected"';
                                         }
                                         
-                                        echo '<option value="'.$salutation->salutation_id.'" '.$selected.'>'.$salutation->name.'</option>';	
+                                        echo '<option value="'.$salutation->salutation_id.'" '.$selected.'>'.JText::_($salutation->language_string).'</option>';
                                     }
                                   ?>
                                 </select>
@@ -490,7 +490,7 @@
                                             $selected = 'selected="selected"';
                                         }       
                                         /*echo '<option value="'.$paymentmethod->paymentmethod_id.'" '.$selected.'>'.$paymentmethod->name.' (+ € '.number_format($paymentmethod->price,2).')'.'</option>';	*/
-                                        echo '<option value="'.$paymentmethod->paymentmethod_id.'" '.$selected.'>'.$paymentmethod->name.'</option>';	
+                                        echo '<option value="'.$paymentmethod->paymentmethod_id.'" '.$selected.'>'.JText::_($paymentmethod->language_string).'</option>';
                                     }
                                   ?>
                                 </select>

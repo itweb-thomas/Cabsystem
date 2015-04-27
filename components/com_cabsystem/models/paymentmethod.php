@@ -20,7 +20,7 @@ class CabsystemModelsPaymentmethod extends CabsystemModelsDefault
 
 	var $_paymentmethod_id = null;
 
-	var $_name = null;
+	var $_language_string = null;
 
 	var $_price = null;
 
@@ -99,16 +99,6 @@ class CabsystemModelsPaymentmethod extends CabsystemModelsDefault
 		{
 
 		  $query->where('p.paymentmethod_id = ' . (int) $this->_paymentmethod_id);
-
-		}
-
-		
-
-		if($this->_name) 
-
-		{
-
-		  $query->where('p.name = ' . (int) $this->_name);
 
 		}
 

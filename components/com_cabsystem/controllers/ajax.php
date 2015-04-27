@@ -137,7 +137,7 @@ class CabsystemControllersAjax extends JController
 							break;
 							case 'customer':
 								$field_value = '';
-								$field_value .= !empty($order->salutation_name) ? $order->salutation_name : ''; 
+								$field_value .= !empty($order->salutation_language_string) ? JText::_($order->salutation_language_string) : '';
 								$field_value .= !empty($order->title_name) ? ' '.$order->title_name : ''; 
 								$field_value .= ' '.$order->name;
 								$field_value .= ' | ';
@@ -151,7 +151,7 @@ class CabsystemControllersAjax extends JController
 								$field_value .= ($order->price_override) ? ' (Spezialpreis)' : ''; 
 							break;
 							case 'paymentmethod':
-								$field_value = !empty($order->paymentmethod_name) ? $order->paymentmethod_name : '';
+								$field_value = !empty($order->paymentmethod_language_string) ? JText::_($order->paymentmethod_language_string) : '';
 							break;
 							case 'luggage':
 								$field_value = !empty($order->luggage) ? $order->luggage.' Koffer' : 'keine Angaben'; 

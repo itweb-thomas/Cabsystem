@@ -267,7 +267,7 @@ function displayPrice(price,type) {
 	
 	var POSTORDER_PRICE_TEXT = '';
 	if($("#"+type+"Form-postorder").select2('val') == 1) {
-		POSTORDER_PRICE_TEXT = ' (+ '+' € '+jQuery.number(parseFloat(act_price+night_price),2)+' für Rückfahrt)';
+		POSTORDER_PRICE_TEXT = ' (+ '+' € '+jQuery.number(parseFloat(act_price+night_price),2)+' '+lang['COM_CABSYSTEM_LANG_PRICE_FOR_RETURN']+')';
 	}
 	
 	if(act_price < 0) {

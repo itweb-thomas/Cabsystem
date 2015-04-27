@@ -276,7 +276,7 @@
                                 <select class="form-control" name="salutation_id" id="addForm-salutation_id">
                                   <?php
                                     foreach($this->salutations as $salutation) {
-                                        echo '<option value="'.$salutation->salutation_id.'">'.$salutation->name.'</option>';	
+                                        echo '<option value="'.$salutation->salutation_id.'">'.JText::_($salutation->language_string).'</option>';
                                     }
                                   ?>
                                 </select>
@@ -288,7 +288,7 @@
                                 <select class="form-control" name="title_id" id="addForm-title_id">
                                   <?php
                                     echo '<option value=""></option>';
-                                    echo '<option value="other">Anderer</option>';
+                                    echo '<option value="other">'.JText::_('COM_CABSYSTEM_OTHER_M').'</option>';
                                     foreach($this->titles as $title) {
                                         echo '<option value="'.$title->title_id.'">'.$title->name.'</option>';	
                                     }
@@ -418,7 +418,7 @@
                                   <?php
                                     foreach($this->paymentmethods as $paymentmethod) {
                                         /*echo '<option value="'.$paymentmethod->paymentmethod_id.'" data-paymentmethod_price="'.$paymentmethod->price.'">'.$paymentmethod->name.' (+ € '.number_format($paymentmethod->price,2).')'.'</option>';*/	
-                                        echo '<option value="'.$paymentmethod->paymentmethod_id.'" data-paymentmethod_price="'.$paymentmethod->price.'">'.$paymentmethod->name.'</option>';	
+                                        echo '<option value="'.$paymentmethod->paymentmethod_id.'" data-paymentmethod_price="'.$paymentmethod->price.'">'.JText::_($paymentmethod->language_string).'</option>';
                                     }
                                   ?>
                                 </select>

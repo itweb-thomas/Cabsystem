@@ -615,10 +615,10 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 			yt.city_id AS to_city_id,
 			yt.name AS to_city_name, 
 			c.*, 
-			a.name AS salutation_name,
+			a.language_string AS salutation_language_string,
 			t.name AS title_name,
 			dc.name as destionation_city_name, 
-			p.name as paymentmethod_name, 
+			p.language_string as paymentmethod_language_string,
 			tf.type AS from_ordertype_type, 
 			tf.icon AS from_ordertype_icon, 
 			tf.language_string AS from_ordertype_language_string, 
@@ -1092,7 +1092,7 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 		//KUNDE
 		$result .= '<tr>';
 		$result .= '<td><strong>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_CUSTOMER').':</strong></td><td>';
-		$result .= !empty($order->salutation_name) ? $order->salutation_name : ''; 
+		$result .= !empty($order->salutation_language_string) ? JText::_($order->salutation_language_string) : '';
 		$result .= !empty($order->title_name) ? ' '.$order->title_name : ''; 
 		$result .= ' '.$order->name;
 		$result .= ' | ';
@@ -1166,7 +1166,7 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 		$result .= '<tr>';
 		$result .= '<td><strong>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_PRICE').':</strong></td><td>';
 		$result .= '€ '.$order->price;
-		$result .= !empty($order->paymentmethod_name) ? ' ('.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_PAYMENTMETHOD').': '.$order->paymentmethod_name.')' : '';
+		$result .= !empty($order->paymentmethod_language_string) ? ' ('.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_PAYMENTMETHOD').': '.JText::_($order->paymentmethod_language_string).')' : '';
 		$result .= ($order->price_override) ? ' <strong>'.JText::_('COM_CABSYSTEM_EMAIL_ORDER_DETAILS_SPECIAL_PRICE').'</strong>' : '';
 		$result .= '</td>';
 		$result .= '</tr>';
