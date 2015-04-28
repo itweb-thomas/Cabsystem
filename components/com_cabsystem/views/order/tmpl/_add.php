@@ -153,7 +153,7 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="addForm-flight_number" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_FROM_FLIGHT_ID');?></label>
+                            <label for="addForm-flight_number" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_FROM_FLIGHT_NUMBER');?></label>
                             <div class="col-md-9">
                                 <input type='hidden' class="form-control" name="flight_number" id="addForm-flight_number" />
                             </div>
