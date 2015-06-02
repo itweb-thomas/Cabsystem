@@ -24,6 +24,8 @@ class CabsystemModelsPaymentmethod extends CabsystemModelsDefault
 
 	var $_price = null;
 
+	var $_only_admin = null;
+
 	var $_created = null;
 
 	var $_modified = null;

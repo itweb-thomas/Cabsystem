@@ -256,7 +256,7 @@ class CabsystemModelsDistrict extends CabsystemModelsDefault
 		$query->from('#__cabsystem_districts as d');
 		$query->leftjoin('#__cabsystem_cities as c on c.city_id = d.city_id');
 		$query->where('d.deleted IS NULL');
-		$query->order('d.district');
+		$query->order('d.zip');
 		
 		return $query;
 	}

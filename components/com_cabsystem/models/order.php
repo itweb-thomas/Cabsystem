@@ -619,6 +619,7 @@ class CabsystemModelsOrder extends CabsystemModelsDefault
 			t.name AS title_name,
 			dc.name as destionation_city_name, 
 			p.language_string as paymentmethod_language_string,
+			p.only_admin as paymentmethod_only_admin,
 			tf.type AS from_ordertype_type, 
 			tf.icon AS from_ordertype_icon, 
 			tf.language_string AS from_ordertype_language_string, 

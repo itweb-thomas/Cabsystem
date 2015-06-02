@@ -418,7 +418,10 @@
                                   <?php
                                     foreach($this->paymentmethods as $paymentmethod) {
                                         /*echo '<option value="'.$paymentmethod->paymentmethod_id.'" data-paymentmethod_price="'.$paymentmethod->price.'">'.$paymentmethod->name.' (+ € '.number_format($paymentmethod->price,2).')'.'</option>';*/	
-                                        echo '<option value="'.$paymentmethod->paymentmethod_id.'" data-paymentmethod_price="'.$paymentmethod->price.'">'.JText::_($paymentmethod->language_string).'</option>';
+                                        //Wenn bei Paymentmethod gespeichert ist dass nur der Admin sie auswaehlen darf (only_admin == 1)
+                                        if(!$paymentmethod->only_admin || (JFactory::getUser()->authorise('cabsystem.admin', 'com_cabsystem'))) {
+                                            echo '<option value="'.$paymentmethod->paymentmethod_id.'" data-paymentmethod_price="'.$paymentmethod->price.'">'.JText::_($paymentmethod->language_string).'</option>';
+                                        }
                                     }
                                   ?>
                                 </select>
