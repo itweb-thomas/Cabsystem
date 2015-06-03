@@ -80,7 +80,7 @@
                     ?>
                 
                     <div class="form-group">
-                        <label for="addForm-from_ordertype_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_FROM_ORDERTYPE_ID');?></label>
+                        <label for="addForm-from_ordertype_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_FROM_ORDERTYPE_ID');?><span class="asterisk">*</span></label>
                         <div class="col-md-9">
                             <select class="form-control" name="from_ordertype_id" id="addForm-from_ordertype_id">
                               <?php
@@ -95,7 +95,7 @@
                             
                     <div id="addForm-from_ordertype_section_address" class="ordertype_section_from well">
                         <div class="form-group">
-                            <label for="addForm-from_city_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_FROM_CITY_ID');?></label>
+                            <label for="addForm-from_city_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_FROM_CITY_ID');?><span class="asterisk">*</span></label>
                             <div class="col-md-9">
                                 <select class="form-control" name="from_city_id" id="addForm-from_city_id">
                                   <?php
@@ -109,14 +109,14 @@
                         </div>
         
                         <div class="form-group">
-                            <label for="addForm-from_district_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_FROM_DISTRICT_ID');?></label>
+                            <label for="addForm-from_district_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_FROM_DISTRICT_ID');?><span class="asterisk">*</span></label>
                             <div class="col-md-9">
                                 <input type='hidden' class="form-control" name="from_district_id" id="addForm-from_district_id" />
                             </div>
                         </div>
         
                         <div class="form-group">
-                            <label for="addForm-from_street_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_FROM_STREET_ID');?></label>
+                            <label for="addForm-from_street_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_FROM_STREET_ID');?><span class="asterisk">*</span></label>
                             <div class="col-md-9">
                                 <input type='hidden' class="form-control" name="from_street_id" id="addForm-from_street_id" />
                             </div>
@@ -139,7 +139,7 @@
                             
                     <div id="addForm-from_ordertype_section_airport" class="ordertype_section_from well">
                         <div class="form-group">
-                            <label for="addForm-from_flight_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_FROM_FLIGHT_ID');?></label>
+                            <label for="addForm-from_flight_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_FROM_FLIGHT_ID');?><span class="asterisk">*</span></label>
                             <div class="col-md-9">
                                 <select class="form-control" name="from_flight_id" id="addForm-from_flight_id">
                                   <?php
@@ -172,7 +172,7 @@
                     </div>
                             
                     <div class="form-group">
-                        <label for="addForm-to_ordertype_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_TO_ORDERTYPE_ID');?></label>
+                        <label for="addForm-to_ordertype_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_TO_ORDERTYPE_ID');?><span class="asterisk">*</span></label>
                         <div class="col-md-9">
                             <select class="form-control" name="to_ordertype_id" id="addForm-to_ordertype_id">
                               <?php
@@ -187,7 +187,7 @@
                             
                     <div id="addForm-to_ordertype_section_address" class="ordertype_section_to well">
                         <div class="form-group">
-                            <label for="addForm-to_city_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_TO_CITY_ID');?></label>
+                            <label for="addForm-to_city_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_TO_CITY_ID');?><span class="asterisk">*</span></label>
                             <div class="col-md-9">
                                 <select class="form-control" name="to_city_id" id="addForm-to_city_id">
                                   <?php
@@ -201,14 +201,14 @@
                         </div>
         
                         <div class="form-group">
-                            <label for="addForm-to_district_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_TO_DISTRICT_ID');?></label>
+                            <label for="addForm-to_district_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_TO_DISTRICT_ID');?><span class="asterisk">*</span></label>
                             <div class="col-md-9">
                                 <input type='hidden' class="form-control" name="to_district_id" id="addForm-to_district_id" />
                             </div>
                         </div>
         
                         <div class="form-group">
-                            <label for="addForm-to_street_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_TO_STREET_ID');?></label>
+                            <label for="addForm-to_street_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_TO_STREET_ID');?><span class="asterisk">*</span></label>
                             <div class="col-md-9">
                                 <input type='hidden' class="form-control" name="to_street_id" id="addForm-to_street_id" />
                             </div>
@@ -245,7 +245,7 @@
                     </div>-->
                             
                     <div class="form-group">
-                        <label for="addForm-date" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_DATE');?></label>
+                        <label for="addForm-date" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_DATE');?><span class="asterisk">*</span></label>
                         <div class="col-md-9">
                             <div class='input-group date' id='addForm-date-picker' data-date-format="YYYY-MM-DD" data-min-date="<?php echo (JFactory::getUser()->authorise('cabsystem.admin', 'com_cabsystem')) ? 'false' : 'true';?>">
                                 <input type='text' class="form-control" name="date" id="addForm-date" readonly="readonly"/>
@@ -255,7 +255,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="addForm-time" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_TIME');?></label>
+                        <label for="addForm-time" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_TIME');?><span class="asterisk">*</span></label>
                         <div class="col-md-9">
                             <div class='input-group date' id='addForm-time-picker' data-date-format="HH:mm:ss">
                                 <input type='text' class="form-control" name="time" id="addForm-time" readonly="readonly" data-check="true"/>
@@ -297,13 +297,13 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="addForm-name" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_NAME');?></label>
+                            <label for="addForm-name" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_NAME');?><span class="asterisk">*</span></label>
                             <div class="col-md-9">
                                 <input type="text" class="form-control" id="addForm-name" name="name">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="addForm-phone" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_PHONE');?></label>
+                            <label for="addForm-phone" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_PHONE');?><span class="asterisk">*</span></label>
                             <div class="col-md-9">
                                 <input type="text" class="form-control" id="addForm-phone" name="phone">
                             </div>
@@ -317,7 +317,7 @@
                         ?>
                         
                         <div class="form-group">
-                            <label for="addForm-email" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_EMAIL');?></label>
+                            <label for="addForm-email" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_EMAIL');?><span class="asterisk">*</span></label>
                             <div class="col-md-9">
                                 <input type="text" class="form-control" id="addForm-email" name="email" data-check="<?php echo $check_email;?>" />
                             </div>
@@ -349,7 +349,7 @@
 					<div class="panel-heading"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_PANEL_INFOS_HEADLINE');?></div>
 					<div class="panel-body">
                         <div class="form-group">
-                            <label for="addForm-cartype_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_CARTYPE_ID');?></label>
+                            <label for="addForm-cartype_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_CARTYPE_ID');?><span class="asterisk">*</span></label>
                             <div class="col-md-9">
                                 <select class="form-control" name="cartype_id" id="addForm-cartype_id">
                                   <?php
@@ -412,7 +412,7 @@
                         </div>
                         <div id="addForm-additionaladdresses_districts"></div>
                         <div class="form-group">
-                            <label for="addForm-paymentmethod_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_PAYMENTMETHOD_ID');?></label>
+                            <label for="addForm-paymentmethod_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_PAYMENTMETHOD_ID');?><span class="asterisk">*</span></label>
                             <div class="col-md-9">
                                 <select class="form-control" name="paymentmethod_id" id="addForm-paymentmethod_id">
                                   <?php
@@ -483,7 +483,7 @@
 					<div class="panel-body">
                     	<p><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_POSTORDER_INFO');?></p>
                         <div class="form-group">
-                            <label for="addForm-postorder_date" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_POSTORDER_DATE');?></label>
+                            <label for="addForm-postorder_date" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_POSTORDER_DATE');?><span class="asterisk">*</span></label>
                             <div class="col-md-9">
                                 <div class='input-group date' id='addForm-postorder_date-picker' data-date-format="YYYY-MM-DD" data-min-date="<?php echo (JFactory::getUser()->authorise('cabsystem.admin', 'com_cabsystem')) ? 'false' : 'true';?>">
                                     <input type='text' class="form-control" name="postorder_date" id="addForm-postorder_date" readonly="readonly"/>
@@ -493,7 +493,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="addForm-postorder_time" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_POSTORDER_TIME');?></label>
+                            <label for="addForm-postorder_time" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_POSTORDER_TIME');?><span class="asterisk">*</span></label>
                             <div class="col-md-9">
                                 <div class='input-group date' id='addForm-postorder_time-picker' data-date-format="HH:mm:ss">
                                     <input type='text' class="form-control" name="postorder_time" id="addForm-postorder_time" readonly="readonly" data-check="true"/>
@@ -506,7 +506,7 @@
                         	<p class="form-static-control"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_POSTORDER_FLIGHT_INFO');?></p>
                         </div>
                         <div class="form-group">
-                            <label for="addForm-postorder_from_flight_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_POSTORDER_FROM_FLIGHT_ID');?></label>
+                            <label for="addForm-postorder_from_flight_id" class="col-md-3 control-label"><?php echo JText::_('COM_CABSYSTEM_MODAL_ADD_POSTORDER_FROM_FLIGHT_ID');?><span class="asterisk">*</span></label>
                             <div class="col-md-9">
                                 <select class="form-control" name="postorder_from_flight_id" id="addForm-postorder_from_flight_id">
                                   <?php

@@ -25,6 +25,7 @@ class CabsystemHelpersStyle
 		switch($viewName) {
 			case 'order':
 				switch($layoutName) {
+					case 'websiteall':
 					case 'websitefrom':
 					case 'websiteto':
 					case 'websiteprice':

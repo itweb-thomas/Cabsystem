@@ -84,3 +84,10 @@ label.error,div.error{
 .setDriver {
 	cursor:pointer;
 }
+
+.link {
+	cursor: pointer;
+}
+.asterisk {
+	color: #F40000;
+}

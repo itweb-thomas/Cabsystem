@@ -136,6 +136,25 @@ $(document).ready(function()
 	{
 		cancelOrder();
 	});
+
+	//Unterschiedliche Aufrufe vom ADD Modal
+	$('#addOrderModal').on('show.bs.modal', function (event) {
+		var button = $(event.relatedTarget);
+
+		//PRESELECTION
+		if(button.data('preselection') == 'from_airport') {
+			$("#addForm-from_ordertype_id").select2('val',2).trigger('change');
+			$("#addForm-to_ordertype_id").select2('val',0).trigger('change');
+		}
+		else if(button.data('preselection') == 'to_airport') {
+			$("#addForm-to_ordertype_id").select2('val',2).trigger('change');
+			$("#addForm-from_ordertype_id").select2('val',0).trigger('change');
+		}
+		else {
+			$("#addForm-to_ordertype_id").select2('val',0).trigger('change');
+			$("#addForm-from_ordertype_id").select2('val',0).trigger('change');
+		}
+	})
 });
 
 function cancelOrder()
@@ -454,9 +473,9 @@ function initForm(type) {
 		//Sperren miteinbeziehen
 		lockouts_array = JSON.parse($('#'+type+'Form-lockouts-array').val());
 	}
-	
+
 	//ENTER Key abfangen
-	$("#"+type+"OrderModal").keypress(function( event ) 
+	$("#"+type+"OrderModal").keypress(function( event )
 	{
 		if ( event.which == 13 ) {
 			event.preventDefault();
@@ -467,7 +486,7 @@ function initForm(type) {
 	jQuery.validator.addMethod("lockout", function(value, element) {
 		return checkLockouts(type);
 	}, lang['COM_CABSYSTEM_ERROR_LOCKOUT']);
-	
+
 	//Form Validation hinzufuegen
 	$("#"+type+"OrderForm").validate({
 		rules: {
@@ -567,7 +586,7 @@ function initForm(type) {
 			tos_accepted: lang['COM_CABSYSTEM_ERROR_REQUIRED_TOS_ACCEPTED']
 		}
 	});
-	
+
 	var min_date = '1/1/1900';
 	if($('#'+type+'Form-date-picker').data('min-date')) {
 		min_date = moment().subtract('days', 1);
@@ -584,7 +603,7 @@ function initForm(type) {
 		pickTime: false,
 		minDate:min_date
 	});
-	
+
 	$('#'+type+'Form-time-picker').datetimepicker({
 		language: 'de',
 		pick12HourFormat: false,
@@ -605,7 +624,7 @@ function initForm(type) {
 			}
 		}
 	});
-	
+
 	$('#'+type+'Form-flight_time-picker').datetimepicker({
 		language: 'de',
 		pick12HourFormat: false,
@@ -615,11 +634,11 @@ function initForm(type) {
 		useCurrent: true,
 		pickDate: false
 	});
-	
+
 	if($('#'+type+'Form-postorder_date-picker').data('min-date')) {
 		min_date = moment().subtract('days', 1);
 	}
-	
+
 	$('#'+type+'Form-postorder_date-picker').datetimepicker({
 		language: 'de',
 		pick12HourFormat: false,
@@ -630,7 +649,7 @@ function initForm(type) {
 		pickTime: false,
 		minDate:min_date
 	});
-	
+
 	$('#'+type+'Form-postorder_time-picker').datetimepicker({
 		language: 'de',
 		pick12HourFormat: false,
@@ -640,7 +659,7 @@ function initForm(type) {
 		useCurrent: true,
 		pickDate: false
 	});
-		
+
 	//Bestimmte Rules nur hinzufuegen wenn gechecked werden soll
 	//Email
 	if($("#"+type+"Form-email").data("check") == true) {
@@ -653,11 +672,11 @@ function initForm(type) {
 			}
 		});
 	}
-	
+
 	//Button-Listener hinzufuegen
-	$('#'+type+'Order').click( function(e) 
+	$('#'+type+'Order').click( function(e)
 	{
-		if($('#'+type+'OrderForm').valid()) 
+		if($('#'+type+'OrderForm').valid())
 		{
 			//Formularueberpruefungen
 			var valid = true;
@@ -668,14 +687,14 @@ function initForm(type) {
 				alert(lang['COM_CABSYSTEM_INVALID_A_TO_B']);
 				valid = false;
 			}
-			
+
 			if(!$('#'+type+'Form-from_ordertype_id').valid()) {
 				valid = false;
 			}
 			if(!$('#'+type+'Form-to_ordertype_id').valid()) {
 				valid = false;
 			}
-			
+
 			//FROM Felder fuer TYPE address checken
 			if(analyseType($("#"+type+"Form-from_ordertype_id").find(":selected").data("type")) == 'address') {
 				if(!$('#'+type+'Form-from_city_id').valid()) {
@@ -688,7 +707,7 @@ function initForm(type) {
 					valid = false;
 				}
 			}
-			
+
 			//TO Felder fuer TYPE address checken
 			if(analyseType($("#"+type+"Form-to_ordertype_id").find(":selected").data("type")) == 'address') {
 				if(!$('#'+type+'Form-to_city_id').valid()) {
@@ -701,21 +720,21 @@ function initForm(type) {
 					valid = false;
 				}
 			}
-			
+
 			//FROM Felder fuer TYPE flight checken
 			if(analyseType($("#"+type+"Form-from_ordertype_id").find(":selected").data("type")) == 'airport') {
 				if(!$('#'+type+'Form-from_flight_id').valid()) {
 					valid = false;
 				}
 			}
-			
+
 			//TO Felder fuer TYPE flight checken
 			/*if(analyseType($("#"+type+"Form-to_ordertype_id").find(":selected").data("type")) == 'airport') {
 				if(!$('#'+type+'Form-to_flight_id').valid()) {
 					valid = false;
 				}
 			}*/
-			
+
 			if(!$('#'+type+'Form-date').valid()) {
 				valid = false;
 			}
@@ -725,7 +744,7 @@ function initForm(type) {
 					valid = false;
 				}
 			}
-			
+
 			//PERSON
 			if(!$('#'+type+'Form-name').valid()) {
 				valid = false;
@@ -742,7 +761,7 @@ function initForm(type) {
 			if(!$('#'+type+'Form-salutation_id').valid()) {
 				valid = false;
 			}
-			
+
 			if(type == 'add') {
 				//Bei Admin muss keine Ueberpruefung stattfinden (check=false)
 				if($('#'+type+'Form-tos_accepted').length > 0) {
@@ -752,14 +771,14 @@ function initForm(type) {
 					}
 				}
 			}
-			
+
 			//ADDITIONALADDRESS_DISTRICTS checken
 			$('#'+type+'Form-additionaladdresses_districts').find('input.additionaladdresses_district').each(function() {
 				if(!$(this).valid()) {
 					valid = false;
 				}
 			});
-			
+
 			//RUECKFAHRT OPTIONEN
 			if($("#"+type+"Form-postorder").select2('val') == 1) {
 				if(!$('#'+type+'Form-postorder_date').valid()) {
@@ -780,14 +799,14 @@ function initForm(type) {
 					}
 				}
 			}
-			
+
 			if(valid) {
 				//Alle disabled Felder die mituebertragen werden sollen enablen
 				$("#"+type+"Form-time-picker").data("DateTimePicker").enable();
-				
+
 				//Informationen des Fahrers aus dem Form ziehen
 				var orderInfo = $("#"+type+"OrderForm").serialize();
-				
+
 				//Alle disabled Felder die mituebertragen werden sollen wieder disablen
 				$("#"+type+"Form-time-picker").data("DateTimePicker").disable();
 
@@ -807,14 +826,14 @@ function initForm(type) {
 					success: function(result) {
 						if (result.success){
 							jQuery.notify(result.msg, "success");
-							
+
 							//Wenn EDIT dann aktuelle Zeile loeschen
 							if(type == 'edit') {
 								var anSelected = getSelectedDataTableRow( oTable );
 								if ( anSelected.length !== 0 ) {
 									oTable.fnDeleteRow( anSelected[0] );
 								}
-								
+
 								//Variable der aktuell selektierten TR auf null setzen und Buttons disablen
 								selected_order_id = null;
 								selected_driver_id = null;
@@ -825,27 +844,27 @@ function initForm(type) {
 								$('#getSetDriverModalOrder').attr("disabled", true);
 								$('#cancelOrder').attr("disabled", true);
 							}
-							
+
 							if($("#getAddModalOrder").data('webform') != true) {
 								//Anzahl der Elemente holen
 								var tr_amount = result.tr_amount;
-								
+
 								for(var i=0; i<tr_amount; i++) {
 									var tr = $(result.tr[i]);
-								
+
 									//Zeile das Attribut mit der ID geben
 									tr.attr('data-order_id',result.datatable_data[i].order_id);
-									
+
 									//Zeile den EventListener anhaengen
 									tr.click(function(event) {
 										changeSelectedOrderId($(this).attr('data-order_id'),$(this).attr('data-driver_id'));
 									});
-									
+
 									oTable.fnAddTr(tr[0]);
 								}
-								
+
 							}
-							
+
 							//Modal verstecken
 							//Zuvor wieder zurueckverschieben zu urspruenglicher Stelle
 							if(type == 'add' && $("#getAddModalOrder").data('webform') == true) {
@@ -1380,16 +1399,6 @@ function initForm(type) {
 		$("#"+type+"Form-postorder_from_flight_id").select2('enable',false);
 		$("#"+type+"Form-postorder_flight_number").val('');	
 		$("#"+type+"Form-postorder_flight_number").prop('disabled',true);	
-	}
-	
-	//PRESELECTION
-	if(type == 'add') {
-		if($('#getAddModalOrder').data('preselection') == 'from_airport') {
-			$("#"+type+"Form-from_ordertype_id").select2('val',2).trigger('change');
-		}
-		else if($('#getAddModalOrder').data('preselection') == 'to_airport') {
-			$("#"+type+"Form-to_ordertype_id").select2('val',2).trigger('change');
-		}
 	}
 	
 	//Wenn ADD dann den Preis initalisieren
