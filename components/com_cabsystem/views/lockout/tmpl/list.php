@@ -42,6 +42,7 @@
 				<th>Timestamp</th>
 				<th>Datum</th>
 				<th>Wann</th>
+				<th>Typ</th>
                 <th>Status</th>
             </tr>
 		</thead>

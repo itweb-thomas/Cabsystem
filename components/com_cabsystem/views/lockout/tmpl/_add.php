@@ -44,6 +44,17 @@
 					</div>
 
 					<div class="form-group">
+						<label for="addForm-type" class="col-sm-2 control-label">Art</label>
+						<div class="col-sm-10">
+							<select class="form-control" name="type" id="addForm-type">
+								<option value="all"><?php echo JText::_('COM_CABSYSTEM_LOCKOUT_TYPE_ALL');?></option>
+								<option value="from"><?php echo JText::_('COM_CABSYSTEM_LOCKOUT_TYPE_FROM');?></option>
+								<option value="to"><?php echo JText::_('COM_CABSYSTEM_LOCKOUT_TYPE_TO');?></option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
 
 						<div class="col-sm-offset-2 col-md-10">
 

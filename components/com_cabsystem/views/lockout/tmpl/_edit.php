@@ -48,6 +48,17 @@
 					</div>
 
 					<div class="form-group">
+						<label for="editForm-type" class="col-sm-2 control-label">Art</label>
+						<div class="col-sm-10">
+							<select class="form-control" name="type" id="editForm-type">
+								<option value="all" <?php echo ($this->lockout->type == 'all') ? 'selected="selected"' : '';?>><?php echo JText::_('COM_CABSYSTEM_LOCKOUT_TYPE_ALL');?></option>
+								<option value="from" <?php echo ($this->lockout->type == 'from') ? 'selected="selected"' : '';?>><?php echo JText::_('COM_CABSYSTEM_LOCKOUT_TYPE_FROM');?></option>
+								<option value="to" <?php echo ($this->lockout->type == 'to') ? 'selected="selected"' : '';?>><?php echo JText::_('COM_CABSYSTEM_LOCKOUT_TYPE_TO');?></option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
 
 						<div class="col-sm-offset-2 col-sm-10">
 
@@ -61,7 +72,7 @@
 										$checked = 'checked="checked"';
 									}
 									?>
-									<input type="checkbox" id="editForm-active" name="active" <?php echo $checked;?>> aktiv
+									<input type="checkbox" id="editForm-active" name="active" <?php echo $checked;?>> System zu diesem Zeitpunkt sperren
 
 								</label>
 

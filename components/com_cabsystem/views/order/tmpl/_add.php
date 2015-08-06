@@ -73,7 +73,7 @@
                     foreach($this->lockouts as $lockout)
                     {
                         if($lockout->active == 1) {
-                            array_push($lockouts_array,array('date'=>date("Y-m-d", strtotime($lockout->date)),'hour'=>$lockout->hour));
+                            array_push($lockouts_array,array('date'=>date("Y-m-d", strtotime($lockout->date)),'hour'=>$lockout->hour,'type'=>$lockout->type));
                         }
                     }
                     echo '<input id="addForm-lockouts-array" type="hidden" value="'.htmlentities(json_encode($lockouts_array)).'"/>';

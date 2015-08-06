@@ -17,6 +17,11 @@
 		?>
 	</td>
 	<td>
+		<?php
+		echo JText::_('COM_CABSYSTEM_LOCKOUT_TYPE_'.strtoupper($this->lockout->type));
+		?>
+	</td>
+	<td>
 	<?php 
 	$active = '<i class="icon-sm icon-inactive fa fa-minus-circle"></i>&nbsp;System ist gesperrt';
 	if($this->lockout->active == 0)

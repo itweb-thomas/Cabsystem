@@ -98,6 +98,7 @@ function initForm(type) {
 	});
 
 	$("#"+type+"Form-hour").select2();
+	$("#"+type+"Form-type").select2();
 
 	//Form Validation hinzufuegen
 	$("#"+type+"LockoutForm").validate({

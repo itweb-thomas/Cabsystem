@@ -436,7 +436,7 @@ function initOtherOptionHandler(id) {
 	}
 }
 
-function checkLockouts(type) {
+function checkLockouts(type,element) {
 	if(type == 'add') {
 		//alle gesperrten Stunden durchgehen
 		//alert($('#' + type + 'Form-date').val() + ' ' + $('#' + type + 'Form-time').val());
@@ -444,7 +444,12 @@ function checkLockouts(type) {
 		for (var i = 0; i < lockouts_array.length; i++) {
 			//alert(lockouts_array[i].date + ' ' + lockouts_array[i].hour+':00:00' + ' - ' +lockouts_array[i].date + ' ' + ((parseInt(lockouts_array[i].hour) + 1))+':00:00');
 			//[year, month, day, hour, minute, second, millisecond]
-			var time = moment($('#' + type + 'Form-date').val() + ' ' + $('#' + type + 'Form-time').val());
+			if($(element).attr('id') == type+"Form-time") {
+				var time = moment($('#' + type + 'Form-date').val() + ' ' + $('#' + type + 'Form-time').val());
+			}
+			else if($(element).attr('id') == type+"Form-postorder_time") {
+				var time = moment($('#' + type + 'Form-postorder_date').val() + ' ' + $('#' + type + 'Form-postorder_time').val());
+			}
 			var from = moment(lockouts_array[i].date).set('hour',lockouts_array[i].hour);
 			var to = moment(lockouts_array[i].date).set('hour',((parseInt(lockouts_array[i].hour) + 1)));
 
@@ -454,7 +459,33 @@ function checkLockouts(type) {
 
 			//Wenn ZEIT in den gesperrten Stunden liegt - nicht valide
 			if ((time.isAfter(from) || time.isSame(from)) && (time.isSame(to) || time.isBefore(to))) {
-				return false;
+				//Nur wenn der TYP (from, to) auch passt
+				//Wenn Typ ALL
+				if(lockouts_array[i].type == 'all') {
+					return false;
+				}
+				//BEI NORMALER FAHRT
+				if($(element).attr('id') == type+"Form-time") {
+					//Wenn Typ FROM und FROM_ORDERTYPE ist airport
+					if(lockouts_array[i].type == 'from' && analyseType($("#"+type+"Form-from_ordertype_id").find(":selected").data("type")) == 'airport') {
+						return false;
+					}
+					//Wenn Typ TO und TO_ORDERTYPE ist airport
+					else if(lockouts_array[i].type == 'to' && analyseType($("#"+type+"Form-to_ordertype_id").find(":selected").data("type")) == 'airport') {
+						return false;
+					}
+				}
+				//BEI RUECKFAHRT (genau umgekehrt)
+				if($(element).attr('id') == type+"Form-postorder_time") {
+					//Wenn Typ FROM und TO_ORDERTYPE ist airport
+					if(lockouts_array[i].type == 'from' && analyseType($("#"+type+"Form-to_ordertype_id").find(":selected").data("type")) == 'airport') {
+						return false;
+					}
+					//Wenn Typ TO und FROM_ORDERTYPE ist airport
+					else if(lockouts_array[i].type == 'to' && analyseType($("#"+type+"Form-from_ordertype_id").find(":selected").data("type")) == 'airport') {
+						return false;
+					}
+				}
 			}
 		}
 		return true;
@@ -484,7 +515,7 @@ function initForm(type) {
 	});
 
 	jQuery.validator.addMethod("lockout", function(value, element) {
-		return checkLockouts(type);
+		return checkLockouts(type,element);
 	}, lang['COM_CABSYSTEM_ERROR_LOCKOUT']);
 
 	//Form Validation hinzufuegen
@@ -550,7 +581,8 @@ function initForm(type) {
 				required: true
 			},
 			"postorder_time": {
-				required: true
+				required: true,
+				lockout: true
 			},
 			"tos_accepted": {
 				required: true
@@ -582,7 +614,10 @@ function initForm(type) {
 				lockout: lang['COM_CABSYSTEM_ERROR_LOCKOUT_TIME']
 			},
 			postorder_date: lang['COM_CABSYSTEM_ERROR_REQUIRED_POSTORDER_DATE'],
-			postorder_time: lang['COM_CABSYSTEM_ERROR_REQUIRED_POSTORDER_TIME'],
+			postorder_time: {
+				required: lang['COM_CABSYSTEM_ERROR_REQUIRED_POSTORDER_TIME'],
+				lockout: lang['COM_CABSYSTEM_ERROR_LOCKOUT_TIME']
+			},
 			tos_accepted: lang['COM_CABSYSTEM_ERROR_REQUIRED_TOS_ACCEPTED']
 		}
 	});
@@ -739,10 +774,18 @@ function initForm(type) {
 				valid = false;
 			}
 			//ZEIT nur wenn gecheckt werden soll (zb nicht wenn Ankunftszeit gesetzt ist)
+			var was_disabled = false;
+			if($("#"+type+"Form-time").prop('disabled') == true) {
+				$("#"+type+"Form-time").prop('disabled',false);
+				was_disabled = true;
+			}
 			if($("#"+type+"Form-time").data("check") == true) {
 				if(!$('#'+type+'Form-time').valid()) {
 					valid = false;
 				}
+			}
+			if(was_disabled) {
+				$("#"+type+"Form-time").prop('disabled',true);
 			}
 
 			//PERSON
@@ -908,14 +951,14 @@ function initForm(type) {
 	initOtherOptionHandler(type+"Form-from_flight_id");
 	$("#"+type+"Form-postorder_from_flight_id").on("change", initOtherOption);
 	initOtherOptionHandler(type+"Form-postorder_from_flight_id");
-	
+
 	if($('#'+type+'Form-district-array').length !== 0 && $('#'+type+'Form-street-array').length !== 0) {
 		var district_array = JSON.parse($('#'+type+'Form-district-array').val());
 		var street_array = JSON.parse($('#'+type+'Form-street-array').val());
 		var all_districts_array = JSON.parse($('#'+type+'Form-all-districts-array').val());
 
 		var flightnumber_array = JSON.parse($('#'+type+'Form-flightnumber-array').val());
-		
+
 		//VON
 		$("#"+type+"Form-from_city_id").select2();
 
@@ -926,7 +969,7 @@ function initForm(type) {
 		if(type == 'add') {
 			$("#"+type+"Form-from_city_id").select2('val','',true);
 		}
-		
+
 		from_data_district[type] = district_array[$("#"+type+"Form-from_city_id").select2("val")];
 		$("#"+type+"Form-from_district_id").select2({
 			data:function() { return { text:'tag', results: from_data_district[type] }; },
@@ -955,7 +998,7 @@ function initForm(type) {
 		initOtherOptionHandler(type+"Form-from_district_id");
 		$("#"+type+"Form-flight_number").on("change", initOtherOption);
 		initOtherOptionHandler(type+"Form-flight_number");
-		
+
 		from_data_street[type] = street_array[$("#"+type+"Form-from_district_id").select2("val")];
 		$("#"+type+"Form-from_street_id").select2({
 			data:function() { return { text:'tag', results: from_data_street[type] }; },
@@ -966,14 +1009,14 @@ function initForm(type) {
 		//LERNENDES SYSTEM: Feld hinzufuegen/entfernen
 		$("#"+type+"Form-from_street_id").on("change", initOtherOption);
 		initOtherOptionHandler(type+"Form-from_street_id");
-		
+
 		$("#"+type+"Form-from_city_id").on("change", function(e)
 		{
 			from_data_district[type] = district_array[e.val];
 			$("#"+type+"Form-from_district_id").select2("val","",true);
 			$("#"+type+"Form-from_street_id").select2("val","",true);
 		});
-		
+
 		$("#"+type+"Form-from_district_id").on("change", function(e)
 		{
 			from_data_street[type] = street_array[e.val];
